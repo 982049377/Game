@@ -165,7 +165,11 @@ class Main extends egret.DisplayObjectContainer {
         this.addChild(layoutController);
 
     }
-
+/***
+ * 不合理的地方AStar和地图耦合性强，只能在main里面调用
+ * 虽然用了UI层级管理器但监听还是很恶心
+ * hero打开hero状态面板和后面的装备打开装备面板相同，就没做了
+ */
 
     private mapMove() {
         /***地图 */
