@@ -31,7 +31,7 @@ class User {
     role: Role;
 
     constructor() {
-        this.role=new Role();
+        this.role = new Role();
         this.id = "";
         this.exp = new Bignumber();
         this.cash = new Bignumber();
@@ -53,6 +53,13 @@ class User {
 
     setinformation(id: string) {
         this.id = id;
+        this.role = new Role();
+        this.role.x = 0;
+        this.role.y = 200;
+        this.role.scaleX = 0.8;
+        this.role.scaleY = 0.8;
+        this.addChild(this.role);
+        this.role.firstCreat();
     }
     addHero(hero: Hero) {
         this.heros.push(hero);

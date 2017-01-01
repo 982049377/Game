@@ -15,15 +15,10 @@ class Role extends egret.DisplayObjectContainer {
         this._State.onEnter();
     }
     public firstCreat() {
-        //this._astar=astar;
         this._role = tool.createBitmapByName("10000_png")
-        // this._person.x=0;
-        // this._person.y=200;
         this.setAnchor(this._role);
-        //  this._astar.setStartNode(Math.floor(this._person.x/100),Math.floor(this._person.y/100));
         this.addChild(this._role);
         var idle: Idle = new Idle(this);
-        //var walk:Walk=new Walk(this);
         this._State = idle;
         this._State.onEnter();
     }
