@@ -15,7 +15,7 @@ var Astar = (function () {
     p.setStartNode = function (xpos, ypos) {
         this._startx = xpos;
         this._starty = ypos;
-        console.log("起点x:" + xpos + "y:" + ypos);
+        // console.log("起点x:"+xpos+"y:"+ypos)
     };
     p.manhattan = function (node) {
         return Math.abs(node.x - this._endx) * this._straightCost + Math.abs(node.y + this._endy) * this._straightCost;
@@ -81,14 +81,17 @@ var Astar = (function () {
                 this._path[++top] = curr_node;
                 curr_node = curr_node.parent;
             }
-            while (top >= 0) {
-                if (top > 0) {
-                    console.log("(%d,%d)-->", this._path[top].x, this._path[top--].y);
-                }
-                else {
-                    console.log("(%d,%d)", this._path[top].x, this._path[top--].y);
-                }
-            }
+            // while( top >= 0 )        // 下面是输出路径看看~  
+            // {  
+            //     if ( top > 0 )  
+            //     {  
+            //         console.log("(%d,%d)-->", this._path[top].x, this._path[top--].y);  
+            //     }  
+            //     else  
+            //     {  
+            //         console.log("(%d,%d)",this._path[top].x, this._path[top--].y);  
+            //     }  
+            // }  
             return 1;
         }
         else {

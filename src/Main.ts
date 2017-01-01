@@ -110,11 +110,40 @@ class Main extends egret.DisplayObjectContainer {
         }
     }
 
+    //生成任务条件 
+    private creatTaskCondition(type: string) {
+        var taskCondition = null;
+        if (type == "NPCTalkTaskCondition")
+            taskCondition = new NPCTalkTaskCondition();
+        if (type == "KillMonsterTaskCondition")
+            taskCondition = new KillMonsterTaskCondition();
+        return taskCondition;
+    }
+
+    //生成任务
+    private creatTask(id: string): Task {
+        var taskCondition = null;
+        taskCondition = this.creatTaskCondition(Task.Task_LIST[id].TaskCondition);
+        var task = new Task(id,
+            Task.Task_LIST[id].name,
+            Task.Task_LIST[id].dris,
+            Task.Task_LIST[id].fromNPCid,
+            Task.Task_LIST[id].toNPCid,
+            Task.Task_LIST[id].total,
+            taskCondition,
+            Task.Task_LIST[id].toid);
+        return task;
+    }
+
+
     /**
      * 创建游戏场景
      * Create a game scene
      */
     // private _player: Role;
+
+    idlelist = ["Idle0_png", "Idle1_png", "Idle2_png", "Idle3_png"];
+    walklist = ["10000_png", "10001_png", "10002_png", "10003_png", "10004_png", "10005_png", "10006_png", "10007_png"];
     private user: User;
     private _bg: TileMap;
     private _container: egret.DisplayObjectContainer;
@@ -132,7 +161,7 @@ class Main extends egret.DisplayObjectContainer {
 
         this.user = new User();
         this._container.addChild(this.user.container)
-        this.user.setinformation("982049377")
+        this.user.setinformation("982049377",this.idlelist,this.walklist)
 
         this.addChild(this._container);
 
@@ -149,12 +178,12 @@ class Main extends egret.DisplayObjectContainer {
         var qinglongyanyuedao = new Equipment();
         bitmap = this.createBitmapByName("weapan001_png");
         qinglongyanyuedao.setinformation("we001", 10, 0, "青龙偃月刀", equipmentQualitySort.Story, bitmap);
-        var atkCrystal = new Crystal();
-        bitmap = this.createBitmapByName("atk001_png");
-        atkCrystal.setinformation("atk001", 5, 0, "攻击宝石", bitmap)
-        var defCrystal = new Crystal();
-        bitmap = this.createBitmapByName("def001_png");
-        defCrystal.setinformation("def001", 0, 5, "防御宝石", bitmap)
+        // var atkCrystal = new Crystal();
+        // bitmap = this.createBitmapByName("atk001_png");
+        // atkCrystal.setinformation("atk001", 5, 0, "攻击宝石", bitmap)
+        // var defCrystal = new Crystal();
+        // bitmap = this.createBitmapByName("def001_png");
+        // defCrystal.setinformation("def001", 0, 5, "防御宝石", bitmap)
 
         guanyu.addEquipment(this.user, qinglongyanyuedao);
         //qinglongyanyuedao.addCrystal(this.user, atkCrystal);
@@ -162,14 +191,69 @@ class Main extends egret.DisplayObjectContainer {
 
 
 
+        var taskService: TaskService = TaskService.getIntance();
+        var task: Task = this.creatTask("001");
+        var task2: Task = this.creatTask("002");
+        taskService.addTask(task);
+        taskService.addTask(task2);
+
+        var NPC1 = new NPC("01");
+        var NPC2 = new NPC("02");
+        taskService.addObserver(NPC1);
+        taskService.addObserver(NPC2);
+        taskService.Canaccept("001");
+        NPC1.call();
+        NPC2.call();
+        // taskService.accept(task.getid());
+
+        this._container.addChild(NPC1);
+        this._container.addChild(NPC2);
+        NPC1.x = 580; NPC1.y = 400;
+        NPC2.x = 870; NPC2.y = 800;
+
+        var TaskPanelLogo: egret.Bitmap = new egret.Bitmap();
+        TaskPanelLogo.texture = RES.getRes("TaskPanelLogo_png");
+        TaskPanelLogo.x = 100;
+        TaskPanelLogo.y = 500;
+        TaskPanelLogo.scaleX = 0.5;
+        TaskPanelLogo.scaleY = 0.5;
+        this._container.addChild(TaskPanelLogo);
+
+        TaskPanelLogo.touchEnabled = true;
+        var taskPanel = new TaskPanel();
+        TaskPanelLogo.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
+            //var taskPanel=new TaskPanel();
+            taskPanel.call();
+            this._container.addChild(taskPanel);
+            taskPanel.x = 100;
+            taskPanel.y = 600;
+        }, this);
+
+        var scene: SceneService = new SceneService();
+
+        var Monster: egret.Bitmap = new egret.Bitmap();
+        Monster.texture = RES.getRes("Monster_png");
+        Monster.x = 400;
+        Monster.y = 900;
+        Monster.scaleX = 0.5;
+        Monster.scaleY = 0.5;
+        this._container.addChild(Monster);
+
+        Monster.touchEnabled = true;
+        Monster.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
+            scene.notify("002");
+        }, this);
+
+
+
         this.addChild(layoutController);
 
     }
-/***
- * 不合理的地方AStar和地图耦合性强，只能在main里面调用
- * 虽然用了UI层级管理器但监听还是很恶心
- * hero打开hero状态面板和后面的装备打开装备面板相同，就没做了
- */
+    /***
+     * 不合理的地方AStar和地图耦合性强，只能在main里面调用
+     * 虽然用了UI层级管理器但监听还是很恶心
+     * hero打开hero状态面板和后面的装备打开装备面板相同，就没做了
+     */
 
     private mapMove() {
         /***地图 */
@@ -186,8 +270,9 @@ class Main extends egret.DisplayObjectContainer {
     }
 
     private walkByTap() {
-        var idle: Idle = new Idle(this.user.role);
-        var walk: Walk = new Walk(this.user.role);
+
+        var idle: Idle = new Idle(this.user.role, this.idlelist);
+        var walk: Walk = new Walk(this.user.role, this.walklist);
         this.touchEnabled = true;
         this.parent.stage.addEventListener(egret.TouchEvent.TOUCH_TAP, (evt: egret.TouchEvent) => {
             this.setAstar();

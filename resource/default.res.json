@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "bg_jpg,egret_icon_png,description_json,001_png,002_png,weapan001_png,bg_png,Border_png,atk001_png,def001_png,detailbg_png,return_png,10005_png,10007_png,Idle0_png,10006_png,Idle2_png,Idle1_png,Idle3_png,road_jpg,road_png,water_jpg,10000_png,water_png,10001_png,10002_png,10003_png,10004_png,null_png",
+			"keys": "bg_jpg,egret_icon_png,description_json,001_png,002_png,weapan001_png,bg_png,Border_png,atk001_png,def001_png,detailbg_png,return_png,10005_png,10007_png,Idle0_png,10006_png,Idle2_png,Idle1_png,Idle3_png,road_jpg,road_png,water_jpg,10000_png,water_png,10001_png,10002_png,10003_png,10004_png,null_png,0_png,1_png,2_png,3_png,4_png,Monster_png,NPC01_01_png,NPC01_02_png,NPC01_03_png,NPC01_04_png,NPC01_05_png,NPC01_06_png,NPC02_01_png,NPC02_02_png,NPC02_03_png,NPC02_04_png,TaskPanelbg_png,TaskPanelLogo_png,UI01_png,UI02_png,UI03_png,UI04_png,UI05_png,UI06_png,UI07_png,Taskbg_png",
 			"name": "preload"
 		}
 	],
@@ -150,6 +150,136 @@
 			"name": "null_png",
 			"type": "image",
 			"url": "assets/null.png"
+		},
+		{
+			"name": "0_png",
+			"type": "image",
+			"url": "assets/0.png"
+		},
+		{
+			"name": "1_png",
+			"type": "image",
+			"url": "assets/1.png"
+		},
+		{
+			"name": "2_png",
+			"type": "image",
+			"url": "assets/2.png"
+		},
+		{
+			"name": "3_png",
+			"type": "image",
+			"url": "assets/3.png"
+		},
+		{
+			"name": "4_png",
+			"type": "image",
+			"url": "assets/4.png"
+		},
+		{
+			"name": "Monster_png",
+			"type": "image",
+			"url": "assets/Monster.png"
+		},
+		{
+			"name": "NPC01_01_png",
+			"type": "image",
+			"url": "assets/NPC01_01.png"
+		},
+		{
+			"name": "NPC01_02_png",
+			"type": "image",
+			"url": "assets/NPC01_02.png"
+		},
+		{
+			"name": "NPC01_03_png",
+			"type": "image",
+			"url": "assets/NPC01_03.png"
+		},
+		{
+			"name": "NPC01_04_png",
+			"type": "image",
+			"url": "assets/NPC01_04.png"
+		},
+		{
+			"name": "NPC01_05_png",
+			"type": "image",
+			"url": "assets/NPC01_05.png"
+		},
+		{
+			"name": "NPC01_06_png",
+			"type": "image",
+			"url": "assets/NPC01_06.png"
+		},
+		{
+			"name": "NPC02_01_png",
+			"type": "image",
+			"url": "assets/NPC02_01.png"
+		},
+		{
+			"name": "NPC02_02_png",
+			"type": "image",
+			"url": "assets/NPC02_02.png"
+		},
+		{
+			"name": "NPC02_03_png",
+			"type": "image",
+			"url": "assets/NPC02_03.png"
+		},
+		{
+			"name": "NPC02_04_png",
+			"type": "image",
+			"url": "assets/NPC02_04.png"
+		},
+		{
+			"name": "TaskPanelbg_png",
+			"type": "image",
+			"url": "assets/TaskPanelbg.png"
+		},
+		{
+			"name": "TaskPanelLogo_png",
+			"type": "image",
+			"url": "assets/TaskPanelLogo.png"
+		},
+		{
+			"name": "UI01_png",
+			"type": "image",
+			"url": "assets/UI01.png"
+		},
+		{
+			"name": "UI02_png",
+			"type": "image",
+			"url": "assets/UI02.png"
+		},
+		{
+			"name": "UI03_png",
+			"type": "image",
+			"url": "assets/UI03.png"
+		},
+		{
+			"name": "UI04_png",
+			"type": "image",
+			"url": "assets/UI04.png"
+		},
+		{
+			"name": "UI05_png",
+			"type": "image",
+			"url": "assets/UI05.png"
+		},
+		{
+			"name": "UI06_png",
+			"type": "image",
+			"url": "assets/UI06.png"
+		},
+		{
+			"name": "UI07_png",
+			"type": "image",
+			"url": "assets/UI07.png"
+		},
+		{
+			"name": "Taskbg_png",
+			"type": "image",
+			"url": "assets/Taskbg.png"
 		}
 	]
 }

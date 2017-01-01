@@ -48,14 +48,14 @@ class User {
         return this._cacheFightPower;
     }
 
-    setinformation(id: string) {
+    setinformation(id: string,idlelist:string[],walklist:string[]) {
         this.id = id;
         this.role.x = 0;
         this.role.y = 200;
         this.role.scaleX = 0.8;
         this.role.scaleY = 0.8;
         //this.addChild(this.role);
-        this.role.firstCreat();
+        this.role.call(idlelist,walklist);
         //console.log(this.role._role.texture);
         this.tapRole();
     }

@@ -45,14 +45,14 @@ var User = (function () {
             return this._cacheFightPower;
         }
     );
-    p.setinformation = function (id) {
+    p.setinformation = function (id, idlelist, walklist) {
         this.id = id;
         this.role.x = 0;
         this.role.y = 200;
         this.role.scaleX = 0.8;
         this.role.scaleY = 0.8;
         //this.addChild(this.role);
-        this.role.firstCreat();
+        this.role.call(idlelist, walklist);
         //console.log(this.role._role.texture);
         this.tapRole();
     };

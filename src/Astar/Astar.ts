@@ -21,7 +21,7 @@ class Astar
         public setStartNode(xpos: number, ypos: number) {
             this._startx = xpos;
             this._starty = ypos;
-            console.log("起点x:"+xpos+"y:"+ypos)
+            // console.log("起点x:"+xpos+"y:"+ypos)
         }
 
         private manhattan(node:MapNode):number{
@@ -104,18 +104,18 @@ class Astar
                 curr_node = curr_node.parent;  
             }  
     
-            while( top >= 0 )        // 下面是输出路径看看~  
-            {  
-                if ( top > 0 )  
-                {  
-                    console.log("(%d,%d)-->", this._path[top].x, this._path[top--].y);  
-                }  
-                else  
-                {  
-                    console.log("(%d,%d)",this._path[top].x, this._path[top--].y);  
-                }  
+            // while( top >= 0 )        // 下面是输出路径看看~  
+            // {  
+            //     if ( top > 0 )  
+            //     {  
+            //         console.log("(%d,%d)-->", this._path[top].x, this._path[top--].y);  
+            //     }  
+            //     else  
+            //     {  
+            //         console.log("(%d,%d)",this._path[top].x, this._path[top--].y);  
+            //     }  
 
-            }  
+            // }  
             return 1;
         }  
         else  
