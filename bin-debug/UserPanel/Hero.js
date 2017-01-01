@@ -124,12 +124,12 @@ var Hero = (function (_super) {
         this.name = name;
         this.quality = quality;
         this.properties._bitmap.touchEnabled = true;
-        var heroBar = new heroStatusBar();
+        var heroStatusBar = new HeroStatusBar();
         this.properties._bitmap.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
-            heroBar.setInformation(_this);
-            heroBar.x = 100;
-            heroBar.y = 100;
-            LayoutController.getIntance().addLayer(LayerType.UILayer, heroBar);
+            heroStatusBar.setInformation(_this);
+            heroStatusBar.x = 100;
+            heroStatusBar.y = 100;
+            LayoutController.getIntance().addLayer(LayerType.UILayer, heroStatusBar);
             //console.log("点击人物");
             //this.addChild(heroBar);
             //this.swapChildren(heroBar,this._bitmap);

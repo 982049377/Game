@@ -4,8 +4,8 @@ var HeroBar = (function (_super) {
         var _this = this;
         _super.call(this);
         this.gridX = 90;
-        this.gridY = 60;
-        this.gridOffset = 10;
+        this.gridY = 120;
+        this.gridOffset = 20;
         this.container = new egret.DisplayObjectContainer();
         //this.addChild(this.container);
         this.background = new egret.Bitmap();
@@ -22,6 +22,7 @@ var HeroBar = (function (_super) {
         returnButton.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             _this.removeChild(_this.container);
         }, this);
+        this.inithero();
     }
     var d = __define,c=HeroBar,p=c.prototype;
     p.inithero = function () {
@@ -32,8 +33,12 @@ var HeroBar = (function (_super) {
         }
         this.grids[0].x = this.gridX;
         this.grids[0].y = this.gridY;
+        this.grids[0].scaleY = 1.8;
+        this.grids[0].scaleX = 1.2;
         this.container.addChild(this.grids[0]);
         for (var i = 1; i < User.heroesInTeamLimit; i++) {
+            this.grids[i].scaleY = 1.8;
+            this.grids[i].scaleX = 1.2;
             this.grids[i].x = this.grids[i - 1].x + this.grids[i].width + this.gridOffset;
             this.grids[i].y = this.gridY;
             this.container.addChild(this.grids[i]);
@@ -45,7 +50,7 @@ var HeroBar = (function (_super) {
             this.grids[i].call(user.heroesInTeam[i]);
         }
         for (var i = 0; i < User.heroesInTeamLimit; i++) {
-            this.grids[i].Tap();
+            this.grids[i].Tap(user.heroesInTeam[i]);
         }
         this.addChild(this.container);
     };
@@ -65,20 +70,23 @@ var HeroGrid = (function (_super) {
     }
     var d = __define,c=HeroGrid,p=c.prototype;
     p.call = function (content) {
+        if (content == null) {
+            return;
+        }
         this.content = content;
         this.contentBitmap.texture = content.properties._bitmap.texture;
         tool.anch(this.contentBitmap);
         var scale = this.border.texture.textureWidth / this.contentBitmap.texture.textureWidth;
         this.contentBitmap.scaleX = scale;
         this.contentBitmap.scaleY = scale;
+        this.border.texture = RES.getRes("null_png");
     };
-    p.Tap = function () {
-        var _this = this;
-        var details = new Details();
+    p.Tap = function (hero) {
+        var heroStatusBar = new HeroStatusBar();
         this.contentBitmap.touchEnabled = true;
         this.contentBitmap.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
-            details.setInformation(_this.content);
-            LayoutController.getIntance().addLayer(LayerType.DetailLayer, details);
+            heroStatusBar.setInformation(hero);
+            LayoutController.getIntance().addLayer(LayerType.UILayer, heroStatusBar);
         }, this);
     };
     return HeroGrid;

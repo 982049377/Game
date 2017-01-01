@@ -27,7 +27,7 @@ var game_file_list = [
 	"bin-debug/UserPanel/enum.js",
 	"bin-debug/UserPanel/Equipment.js",
 	"bin-debug/UserPanel/Hero.js",
-	"bin-debug/UserPanel/heroStatusBar.js",
+	"bin-debug/UserPanel/HeroStatusBar.js",
 	"bin-debug/UserPanel/LayoutController.js",
 	"bin-debug/UserPanel/Objectdetail.js",
 	"bin-debug/UserPanel/Property.js",

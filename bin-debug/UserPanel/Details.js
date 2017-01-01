@@ -15,6 +15,11 @@ var Details = (function (_super) {
         background.x = 220;
         //tool.anch(background);
         this.contentField.addChild(background);
+        this.role = new egret.Bitmap();
+        this.role = content.properties._bitmap;
+        this.role.x = 150;
+        this.role.y = 200;
+        this.contentField.addChild(this.role);
         var quality = new egret.TextField();
         quality.text = "Quality:  " + content.getQualityDescript();
         quality.textColor = 0X000000;

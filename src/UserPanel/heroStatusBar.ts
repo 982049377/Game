@@ -1,4 +1,4 @@
-class heroStatusBar extends egret.DisplayObjectContainer {
+class HeroStatusBar extends egret.DisplayObjectContainer {
     background: egret.Bitmap;
     role: egret.Bitmap;
     barname: egret.TextField;

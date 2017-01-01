@@ -125,7 +125,7 @@ var TileMap = (function (_super) {
         //     console.log("鼠标点击点xx:"+x+"yy"+y)
         // },this)
         this._astar = new Astar(this._grid);
-        console.log("AstarCreate");
+        //console.log("AstarCreate");
     };
     return TileMap;
 }(egret.DisplayObjectContainer));

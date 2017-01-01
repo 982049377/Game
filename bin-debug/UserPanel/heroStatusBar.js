@@ -1,6 +1,6 @@
-var heroStatusBar = (function (_super) {
-    __extends(heroStatusBar, _super);
-    function heroStatusBar() {
+var HeroStatusBar = (function (_super) {
+    __extends(HeroStatusBar, _super);
+    function HeroStatusBar() {
         var _this = this;
         _super.call(this);
         this.gridX = 90;
@@ -43,7 +43,7 @@ var heroStatusBar = (function (_super) {
             _this.removeChild(_this.container);
         }, this);
     }
-    var d = __define,c=heroStatusBar,p=c.prototype;
+    var d = __define,c=HeroStatusBar,p=c.prototype;
     p.initPropertyField = function (hero) {
         var level = new egret.TextField();
         level.text = "Level:  " + hero.level.toString();
@@ -112,9 +112,9 @@ var heroStatusBar = (function (_super) {
         }
         this.addChild(this.container);
     };
-    return heroStatusBar;
+    return HeroStatusBar;
 }(egret.DisplayObjectContainer));
-egret.registerClass(heroStatusBar,'heroStatusBar');
+egret.registerClass(HeroStatusBar,'HeroStatusBar');
 var ObjectGrid = (function (_super) {
     __extends(ObjectGrid, _super);
     function ObjectGrid() {
@@ -151,4 +151,4 @@ var ObjectGrid = (function (_super) {
     return ObjectGrid;
 }(egret.DisplayObjectContainer));
 egret.registerClass(ObjectGrid,'ObjectGrid');
-//# sourceMappingURL=heroStatusBar.js.map
+//# sourceMappingURL=HeroStatusBar.js.map

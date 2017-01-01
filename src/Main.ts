@@ -114,114 +114,55 @@ class Main extends egret.DisplayObjectContainer {
      * 创建游戏场景
      * Create a game scene
      */
-    private _player: Role;
+    // private _player: Role;
+    private user: User;
     private _bg: TileMap;
     private _container: egret.DisplayObjectContainer;
     // private _grid:Grid;
     // private _path:Array<MapNode>=new Array;
     private createGameScene(): void {
         this._container = new egret.DisplayObjectContainer();
+        var layoutController = LayoutController.getIntance();
+
 
         this._bg = new TileMap();
         this._container.addChild(this._bg);
         this._bg.Create();
 
-        this._player = new Role();
-        this._player.x = 0;
-        this._player.y = 200;
-        this._player.scaleX = 0.8;
-        this._player.scaleY = 0.8;
-        this._container.addChild(this._player);
-        this._player.firstCreat();
-        //this._player.Creat();
+
+        this.user = new User();
+        this._container.addChild(this.user.container)
+        this.user.setinformation("982049377")
 
         this.addChild(this._container);
+
         this.walkByTap();
         this.mapMove();
 
 
 
+        var guanyu = new Hero();
+        var bitmap = this.createBitmapByName("001_png");
+        guanyu.setinformation("001", "关羽", 95, 85, heroQualitySort.S, bitmap);
+        this.user.addHero(guanyu);
+        this.user.inToTeam(guanyu);
+        var qinglongyanyuedao = new Equipment();
+        bitmap = this.createBitmapByName("weapan001_png");
+        qinglongyanyuedao.setinformation("we001", 10, 0, "青龙偃月刀", equipmentQualitySort.Story, bitmap);
+        var atkCrystal = new Crystal();
+        bitmap = this.createBitmapByName("atk001_png");
+        atkCrystal.setinformation("atk001", 5, 0, "攻击宝石", bitmap)
+        var defCrystal = new Crystal();
+        bitmap = this.createBitmapByName("def001_png");
+        defCrystal.setinformation("def001", 0, 5, "防御宝石", bitmap)
+
+        guanyu.addEquipment(this.user, qinglongyanyuedao);
+        //qinglongyanyuedao.addCrystal(this.user, atkCrystal);
+        //qinglongyanyuedao.addCrystal(this.user, defCrystal);
 
 
 
-        // var layoutController = LayoutController.getIntance();
-        // this.addChild(layoutController);
-        // var user = new User();
-        // user.setinformation("982049377")
-        // var guanyu = new Hero();
-        // var bitmap = this.createBitmapByName("001_png");
-        // guanyu.setinformation("001", "关羽", 95, 85, heroQualitySort.S, bitmap);
-        // var zhangfei = new Hero();
-        // bitmap = this.createBitmapByName("002_png");
-        // zhangfei.setinformation("002", "张飞", 96, 70, heroQualitySort.S, bitmap);
-        // var qinglongyanyuedao = new Equipment();
-        // bitmap = this.createBitmapByName("weapan001_png");
-        // qinglongyanyuedao.setinformation("we001", 10, 0, "青龙偃月刀", equipmentQualitySort.Story, bitmap);
-        // var atkCrystal = new Crystal();
-        // bitmap = this.createBitmapByName("atk001_png");
-        // atkCrystal.setinformation("atk001", 5, 0, "攻击宝石", bitmap)
-        // var defCrystal = new Crystal();
-        // bitmap = this.createBitmapByName("def001_png");
-        // defCrystal.setinformation("def001", 0, 5, "防御宝石", bitmap)
-
-        // guanyu.x = 100;
-        // guanyu.y = 100;
-        // zhangfei.x = 100;
-        // zhangfei.y = 600;
-        // this.addChild(guanyu);
-        // this.addChild(zhangfei)
-
-        // var i = user.fightPower;
-        // console.log("user1没英雄战斗力" + i);
-
-        // user.addHero(guanyu);
-        // user.inToTeam(guanyu);
-
-        // i = user.fightPower;
-        // console.log("user1关羽上阵战斗力" + i);//182
-        // console.log("gunayu" + guanyu.fightPower)
-
-        // guanyu.addEquipment(user, qinglongyanyuedao);
-        // i = user.fightPower;
-        // console.log("user1关羽装备青龙偃月刀上阵战斗力" + i);//194
-        // console.log("gunayu" + guanyu.fightPower)
-
-        // qinglongyanyuedao.addCrystal(user, atkCrystal);
-        // console.log("gunayu  addCrystal " + guanyu.fightPower)
-        // console.log("刀  addCrystal " + qinglongyanyuedao.fightPower)
-        // i = user.fightPower;
-        // console.log("user1关羽装备青龙偃月刀（镶嵌攻击宝石1颗）上阵战斗力" + i);//201.2
-        // console.log("gunayu  addCrystal" + guanyu.fightPower)
-        // console.log("刀  addCrystal " + qinglongyanyuedao.fightPower)
-
-        // qinglongyanyuedao.addCrystal(user, defCrystal);
-        // i = user.fightPower;
-        // console.log("user1关羽装备青龙偃月刀（镶嵌攻击宝石1颗,防御宝石1颗）上阵战斗力" + i);//206
-        // console.log("gunayu战斗力" + guanyu.fightPower)
-
-        // user.addHero(zhangfei);
-        // user.inToTeam(zhangfei);
-        // i = user.fightPower;
-        // console.log("user1关羽and张飞上阵战斗力" + i);//377.2
-        // console.log("gunayu战斗力" + guanyu.fightPower)
-
-        // user.outToTean(zhangfei);
-        // i = user.fightPower;
-        // console.log("user1关羽上阵战斗力" + i);
-        // console.log("user1关羽atk" + guanyu.Atk);
-        // console.log("user1关羽def" + guanyu.Def);
-
-
-
-
-
-
-
-
-
-
-
-
+        this.addChild(layoutController);
 
     }
 
@@ -241,18 +182,18 @@ class Main extends egret.DisplayObjectContainer {
     }
 
     private walkByTap() {
-        var idle: Idle = new Idle(this._player);
-        var walk: Walk = new Walk(this._player);
+        var idle: Idle = new Idle(this.user.role);
+        var walk: Walk = new Walk(this.user.role);
         this.touchEnabled = true;
         this.parent.stage.addEventListener(egret.TouchEvent.TOUCH_TAP, (evt: egret.TouchEvent) => {
             this.setAstar();
-            this._bg._astar.setStartNode(Math.floor((this._player.x) / 100), Math.floor(this._player.y / 100));
+            this._bg._astar.setStartNode(Math.floor((this.user.role.x) / 100), Math.floor(this.user.role.y / 100));
             //this._bg._astar.setStartNode(Math.floor(this._player.x/100),Math.floor(this._player.y/100));
             //this._bg._astar.setEndNode(Math.floor(evt.stageX/100),Math.floor(evt.stageY/100));
             this._bg._astar.setEndNode(Math.floor((evt.stageX + this.map_Grid) / 100), Math.floor(evt.stageY / 100));
             var i = this._bg._astar.findPath();
             if (i == 1) {
-                this._player.SetState(walk)
+                this.user.role.SetState(walk)
                 //egret.Tween.removeTweens(this._player);
                 this.addEventListener(egret.Event.ENTER_FRAME, this.onEnterFrame, this);
                 this.onEnterFrame;
@@ -261,21 +202,21 @@ class Main extends egret.DisplayObjectContainer {
             }
             else
                 if (i == 0) {
-                    this._player.SetState(idle);
+                    this.user.role.SetState(idle);
                     this.setAstar();
                     i = 2;
                 }
                 else
                     if (i == -1) {
-                        this._player.SetState(idle);
+                        this.user.role.SetState(idle);
                         this.setAstar();
                         i = 2;
                     }
         }, this);
         egret.startTick((): boolean => {
             if (this._bg._astar._path[0] != null) {
-                if (this._player.x == (this._bg._astar._path[0].x) * this._bg.MapSize + 50 && this._player.y == this._bg._astar._path[0].y * this._bg.MapSize + 50) {
-                    this._player.SetState(idle);
+                if (this.user.role.x == (this._bg._astar._path[0].x) * this._bg.MapSize + 50 && this.user.role.y == this._bg._astar._path[0].y * this._bg.MapSize + 50) {
+                    this.user.role.SetState(idle);
                     //this.setAstar(); 
                 }
             }
@@ -306,35 +247,35 @@ class Main extends egret.DisplayObjectContainer {
     private onEnterFrame(event: egret.Event): void {
         //console.log('hi');
         var n = this._bg._astar._path.length;
-        console.log(n - this.i);
+        //console.log(n - this.i);
         if (n - this.i < 0)
             return;
         var targetX: number = this._bg._astar._path[n - this.i].x * this._bg.MapSize + this._bg.MapSize / 2;
         var targetY: number = this._bg._astar._path[n - this.i].y * this._bg.MapSize + this._bg.MapSize / 2;
-        var dx: number = targetX - this._player.x;
-        var dy: number = targetY - this._player.y;
+        var dx: number = targetX - this.user.role.x;
+        var dy: number = targetY - this.user.role.y;
         var dist: number = Math.sqrt(dx * dx + dy * dy);
         if (dist < this.step * 2) {
             this.i++;
             if (this.i > this._bg._astar._path.length) {
                 this.removeEventListener(egret.Event.ENTER_FRAME, this.onEnterFrame, this);
-                console.log('remove');
+                //console.log('remove');
             }
         }
         else {
-            if (targetX - this._player.x > this.step)
-                this._player.x += this.step;
-            if (targetY - this._player.y > this.step)
-                this._player.y += this.step;
-            if (this._player.x - targetX > this.step)
-                this._player.x -= this.step;
-            if (this._player.y - targetY > this.step)
-                this._player.y -= this.step;
-            if (Math.abs(this._player.x - targetX) <= this.step) {
-                this._player.x = targetX;
+            if (targetX - this.user.role.x > this.step)
+                this.user.role.x += this.step;
+            if (targetY - this.user.role.y > this.step)
+                this.user.role.y += this.step;
+            if (this.user.role.x - targetX > this.step)
+                this.user.role.x -= this.step;
+            if (this.user.role.y - targetY > this.step)
+                this.user.role.y -= this.step;
+            if (Math.abs(this.user.role.x - targetX) <= this.step) {
+                this.user.role.x = targetX;
             }
-            if (Math.abs(this._player.y - targetY) <= this.step) {
-                this._player.y = targetY;
+            if (Math.abs(this.user.role.y - targetY) <= this.step) {
+                this.user.role.y = targetY;
             }
             //this._player.Move(new Vector2(targetX, targetY), this.inputPos);
         }
@@ -344,8 +285,8 @@ class Main extends egret.DisplayObjectContainer {
     }
 
     private setAstar(): void {
-        egret.Tween.removeTweens(this._player);
-        this._bg._astar.setStartNode(Math.floor(this._player.x / 100), Math.floor(this._player.y / 100));
+        egret.Tween.removeTweens(this.user.role);
+        this._bg._astar.setStartNode(Math.floor(this.user.role.x / 100), Math.floor(this.user.role.y / 100));
         this._bg._astar.empty();
         this.i = 1;
     }

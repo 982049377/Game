@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "bg_jpg,egret_icon_png,description_json,001_png,002_png,weapan001_png,bg_png,Border_png,atk001_png,def001_png,detailbg_png,return_png,10005_png,10007_png,Idle0_png,10006_png,Idle2_png,Idle1_png,Idle3_png,road_jpg,road_png,water_jpg,10000_png,water_png,10001_png,10002_png,10003_png,10004_png",
+			"keys": "bg_jpg,egret_icon_png,description_json,001_png,002_png,weapan001_png,bg_png,Border_png,atk001_png,def001_png,detailbg_png,return_png,10005_png,10007_png,Idle0_png,10006_png,Idle2_png,Idle1_png,Idle3_png,road_jpg,road_png,water_jpg,10000_png,water_png,10001_png,10002_png,10003_png,10004_png,null_png",
 			"name": "preload"
 		}
 	],
@@ -145,6 +145,11 @@
 			"url": "assets/10004.png",
 			"type": "image",
 			"name": "10004_png"
+		},
+		{
+			"name": "null_png",
+			"type": "image",
+			"url": "assets/null.png"
 		}
 	]
 }

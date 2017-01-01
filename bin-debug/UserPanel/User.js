@@ -22,11 +22,13 @@ var User = (function () {
         this.gold = 0;
         this._cacheFightPower = 0;
         this.flag = false;
+        this.container = new egret.DisplayObjectContainer();
         this.role = new Role();
         this.id = "";
         this.exp = new Bignumber();
         this.cash = new Bignumber();
         this.heros = [];
+        this.container.addChild(this.role);
     }
     var d = __define,c=User,p=c.prototype;
     d(p, "heroesInTeam"
@@ -45,6 +47,23 @@ var User = (function () {
     );
     p.setinformation = function (id) {
         this.id = id;
+        this.role.x = 0;
+        this.role.y = 200;
+        this.role.scaleX = 0.8;
+        this.role.scaleY = 0.8;
+        //this.addChild(this.role);
+        this.role.firstCreat();
+        //console.log(this.role._role.texture);
+        this.tapRole();
+    };
+    p.tapRole = function () {
+        var _this = this;
+        var heroBar = new HeroBar();
+        this.role._role.touchEnabled = true;
+        this.role._role.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+            heroBar.setInformation(_this);
+            _this.container.addChild(heroBar);
+        }, this);
     };
     p.addHero = function (hero) {
         this.heros.push(hero);
