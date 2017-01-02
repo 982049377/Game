@@ -145,28 +145,35 @@ class Main extends egret.DisplayObjectContainer {
     idlelist = ["Idle0_png", "Idle1_png", "Idle2_png", "Idle3_png"];
     walklist = ["10000_png", "10001_png", "10002_png", "10003_png", "10004_png", "10005_png", "10006_png", "10007_png"];
     private user: User;
-    private _map: TileMap;
+    private map: TileMap;
     private _container: egret.DisplayObjectContainer;
+    //private gameManager:GameManager;
     // private _grid:Grid;
     // private _path:Array<MapNode>=new Array;
-    private gameScene:GameScene;
     private createGameScene(): void {
         this._container = new egret.DisplayObjectContainer();
-        var layoutController = LayoutController.getIntance();
+        //this.gameManager = GameManager.getInstance();
+
+        this.map = new TileMap();
+        this._container.addChild(this.map);
+        this.map.Create();
+
+        var gameScene = new GameScene(this.map);
+        GameManager.getInstance().secneManager.addScene(gameScene);
 
 
-        this._map = new TileMap();
-        this._container.addChild(this._map);
-        this._map.Create();
-        GameScene.replaceamap(this._map);
+
+
+
 
         this.user = new User();
-        this._container.addChild(this.user.container)
+        //this._container.addChild(this.user.container)
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, this.user.container)
         this.user.setinformation("982049377", this.idlelist, this.walklist)
 
-        this.addChild(this._container);
+        //this.addChild(this._container);
 
-        //this.walkByTap();
+        this.walkByTap();
         this.mapMove();
 
 
@@ -207,8 +214,10 @@ class Main extends egret.DisplayObjectContainer {
         NPC2.call();
         // taskService.accept(task.getid());
 
-        this._container.addChild(NPC1);
-        this._container.addChild(NPC2);
+        // this._container.addChild(NPC1);
+        // this._container.addChild(NPC2);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, NPC1);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, NPC2);
         NPC1.x = 580; NPC1.y = 400;
         NPC2.x = 870; NPC2.y = 800;
 
@@ -218,19 +227,21 @@ class Main extends egret.DisplayObjectContainer {
         TaskPanelLogo.y = 500;
         TaskPanelLogo.scaleX = 0.5;
         TaskPanelLogo.scaleY = 0.5;
-        this._container.addChild(TaskPanelLogo);
+        //this._container.addChild(TaskPanelLogo);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, TaskPanelLogo);
 
         TaskPanelLogo.touchEnabled = true;
         var taskPanel = new TaskPanel();
         TaskPanelLogo.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
             //var taskPanel=new TaskPanel();
             taskPanel.call();
-            this._container.addChild(taskPanel);
+            //this._container.addChild(taskPanel);
+            GameManager.getInstance().UIManager.addLayer(LayerType.DetailLayer, taskPanel);
             taskPanel.x = 100;
             taskPanel.y = 600;
         }, this);
 
-        var scene: SceneService = new SceneService();
+        var sceneService: SceneService = new SceneService();
 
         var Monster: egret.Bitmap = new egret.Bitmap();
         Monster.texture = RES.getRes("Monster_png");
@@ -239,16 +250,14 @@ class Main extends egret.DisplayObjectContainer {
         Monster.scaleX = 0.5;
         Monster.scaleY = 0.5;
         this._container.addChild(Monster);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, Monster);
 
         Monster.touchEnabled = true;
         Monster.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-            scene.notify("002");
+            sceneService.notify("002");
         }, this);
-
-
-
-        this.addChild(layoutController);
-
+        this._container.addChild(GameManager.getInstance().UIManager);
+        this.addChild(this._container);
     }
     /***
      * 不合理的地方AStar和地图耦合性强，只能在main里面调用
@@ -269,6 +278,51 @@ class Main extends egret.DisplayObjectContainer {
             this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onMove, this);
         }, this)
     }
+
+    private walkByTap() {
+
+        var idle: Idle = new Idle(this.user.role, this.idlelist);
+        var walk: Walk = new Walk(this.user.role, this.walklist);
+        this.map.touchEnabled = true;
+        this.map.addEventListener(egret.TouchEvent.TOUCH_TAP, (evt: egret.TouchEvent) => {
+            this.setAstar();
+            console.log("map tap");
+            this.map._astar.setStartNode(Math.floor((this.user.role.x) / 100), Math.floor(this.user.role.y / 100));
+            //this._bg._astar.setStartNode(Math.floor(this._player.x/100),Math.floor(this._player.y/100));
+            //this._bg._astar.setEndNode(Math.floor(evt.stageX/100),Math.floor(evt.stageY/100));
+            this.map._astar.setEndNode(Math.floor((evt.stageX + this.map_Grid) / 100), Math.floor(evt.stageY / 100));
+            var i = this.map._astar.findPath();
+            if (i == 1) {
+                this.user.role.SetState(walk)
+                //egret.Tween.removeTweens(this._player);
+                this.addEventListener(egret.Event.ENTER_FRAME, this.onEnterFrame, this);
+                this.onEnterFrame;
+                //this.Move();
+                i = 2
+            }
+            else
+                if (i == 0) {
+                    this.user.role.SetState(idle);
+                    this.setAstar();
+                    i = 2;
+                }
+                else
+                    if (i == -1) {
+                        this.user.role.SetState(idle);
+                        this.setAstar();
+                        i = 2;
+                    }
+        }, this);
+        egret.startTick((): boolean => {
+            if (this.map._astar._path[0] != null) {
+                if (this.user.role.x == (this.map._astar._path[0].x) * this.map.MapSize + 50 && this.user.role.y == this.map._astar._path[0].y * this.map.MapSize + 50) {
+                    this.user.role.SetState(idle);
+                    //this.setAstar(); 
+                }
+            }
+            return false;
+        }, this);
+    }
     private prevX: number = 0;
     private map_Grid = 0;
     private offsetx: number;
@@ -287,6 +341,55 @@ class Main extends egret.DisplayObjectContainer {
         }
     }
 
+    /**帧事件' */
+    private step: number = 10;
+    private i = 2;
+    private onEnterFrame(event: egret.Event): void {
+        //console.log('hi');
+        var n = this.map._astar._path.length;
+        //console.log(n - this.i);
+        if (n - this.i < 0)
+            return;
+        var targetX: number = this.map._astar._path[n - this.i].x * this.map.MapSize + this.map.MapSize / 2;
+        var targetY: number = this.map._astar._path[n - this.i].y * this.map.MapSize + this.map.MapSize / 2;
+        var dx: number = targetX - this.user.role.x;
+        var dy: number = targetY - this.user.role.y;
+        var dist: number = Math.sqrt(dx * dx + dy * dy);
+        if (dist < this.step * 2) {
+            this.i++;
+            if (this.i > this.map._astar._path.length) {
+                this.removeEventListener(egret.Event.ENTER_FRAME, this.onEnterFrame, this);
+                //console.log('remove');
+            }
+        }
+        else {
+            if (targetX - this.user.role.x > this.step)
+                this.user.role.x += this.step;
+            if (targetY - this.user.role.y > this.step)
+                this.user.role.y += this.step;
+            if (this.user.role.x - targetX > this.step)
+                this.user.role.x -= this.step;
+            if (this.user.role.y - targetY > this.step)
+                this.user.role.y -= this.step;
+            if (Math.abs(this.user.role.x - targetX) <= this.step) {
+                this.user.role.x = targetX;
+            }
+            if (Math.abs(this.user.role.y - targetY) <= this.step) {
+                this.user.role.y = targetY;
+            }
+            //this._player.Move(new Vector2(targetX, targetY), this.inputPos);
+        }
+        // console.log("targetX:"+targetX+"targetY:"+targetY);
+        // console.log("person.x:"+this._player.x+"person.y:"+this._player.y); 
+        // console.log("dx:"+dx+"dy:"+dy); 
+    }
+
+    private setAstar(): void {
+        egret.Tween.removeTweens(this.user.role);
+        this.map._astar.setStartNode(Math.floor(this.user.role.x / 100), Math.floor(this.user.role.y / 100));
+        this.map._astar.empty();
+        this.i = 1;
+    }
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
      * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.

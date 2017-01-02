@@ -66,7 +66,7 @@ class Equipment extends egret.DisplayObjectContainer implements Objectdetail {
         Equipment.Id++;
         this.tempid = Equipment.Id;
         this.properties = new Property();
-        LayoutController.getIntance().addLayer(LayerType.UILayer, this.properties._bitmap);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, this.properties._bitmap);
         // this.addChild(this.properties._bitmap);
     }
     setinformation(id: string, atk: number, def: number, name: string, quality: equipmentQualitySort, bitmap: egret.Bitmap) {

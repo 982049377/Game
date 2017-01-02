@@ -93,7 +93,7 @@ class HeroGrid extends egret.DisplayObjectContainer {
         this.contentBitmap.touchEnabled = true;
         this.contentBitmap.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
             heroStatusBar.setInformation(hero);
-            LayoutController.getIntance().addLayer(LayerType.UILayer, heroStatusBar);
+            GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, heroStatusBar);
         }, this);
     }
 

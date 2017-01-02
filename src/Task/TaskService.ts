@@ -1,7 +1,7 @@
 class TaskService implements EventEmitter{
     //private _tasklist:Task[]=[];
     private _observerlist:Observer[]=[];
-    public static instance;// = new TaskService;
+    public static instance:TaskService;// = new TaskService;
     private static count=0;
     private _tasklist:{[index:string]:Task}={}
 

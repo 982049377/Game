@@ -5,8 +5,8 @@ var SceneService = (function () {
     p.addObserver = function (observer) {
     };
     p.notify = function (id) {
-        var task = TaskService.getIntance()._tasklist[id];
-        TaskService.getIntance()._tasklist[id]._condition.onchange(task);
+        //var task=TaskService.getIntance()._tasklist[id];
+        TaskService.getIntance().finish(id);
     };
     return SceneService;
 }());

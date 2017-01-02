@@ -125,19 +125,22 @@ var Main = (function (_super) {
         var task = new Task(id, Task.Task_LIST[id].name, Task.Task_LIST[id].dris, Task.Task_LIST[id].fromNPCid, Task.Task_LIST[id].toNPCid, Task.Task_LIST[id].total, taskCondition, Task.Task_LIST[id].toid);
         return task;
     };
+    //private gameManager:GameManager;
     // private _grid:Grid;
     // private _path:Array<MapNode>=new Array;
     p.createGameScene = function () {
-        var _this = this;
         this._container = new egret.DisplayObjectContainer();
-        var layoutController = LayoutController.getIntance();
-        this._bg = new TileMap();
-        this._container.addChild(this._bg);
-        this._bg.Create();
+        //this.gameManager = GameManager.getInstance();
+        this.map = new TileMap();
+        this._container.addChild(this.map);
+        this.map.Create();
+        var gameScene = new GameScene(this.map);
+        GameManager.getInstance().secneManager.addScene(gameScene);
         this.user = new User();
-        this._container.addChild(this.user.container);
+        //this._container.addChild(this.user.container)
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, this.user.container);
         this.user.setinformation("982049377", this.idlelist, this.walklist);
-        this.addChild(this._container);
+        //this.addChild(this._container);
         this.walkByTap();
         this.mapMove();
         var guanyu = new Hero();
@@ -170,8 +173,10 @@ var Main = (function (_super) {
         NPC1.call();
         NPC2.call();
         // taskService.accept(task.getid());
-        this._container.addChild(NPC1);
-        this._container.addChild(NPC2);
+        // this._container.addChild(NPC1);
+        // this._container.addChild(NPC2);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, NPC1);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, NPC2);
         NPC1.x = 580;
         NPC1.y = 400;
         NPC2.x = 870;
@@ -182,17 +187,19 @@ var Main = (function (_super) {
         TaskPanelLogo.y = 500;
         TaskPanelLogo.scaleX = 0.5;
         TaskPanelLogo.scaleY = 0.5;
-        this._container.addChild(TaskPanelLogo);
+        //this._container.addChild(TaskPanelLogo);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, TaskPanelLogo);
         TaskPanelLogo.touchEnabled = true;
         var taskPanel = new TaskPanel();
         TaskPanelLogo.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             //var taskPanel=new TaskPanel();
             taskPanel.call();
-            _this._container.addChild(taskPanel);
+            //this._container.addChild(taskPanel);
+            GameManager.getInstance().UIManager.addLayer(LayerType.DetailLayer, taskPanel);
             taskPanel.x = 100;
             taskPanel.y = 600;
         }, this);
-        var scene = new SceneService();
+        var sceneService = new SceneService();
         var Monster = new egret.Bitmap();
         Monster.texture = RES.getRes("Monster_png");
         Monster.x = 400;
@@ -200,11 +207,13 @@ var Main = (function (_super) {
         Monster.scaleX = 0.5;
         Monster.scaleY = 0.5;
         this._container.addChild(Monster);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, Monster);
         Monster.touchEnabled = true;
         Monster.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
-            scene.notify("002");
+            sceneService.notify("002");
         }, this);
-        this.addChild(layoutController);
+        this._container.addChild(GameManager.getInstance().UIManager);
+        this.addChild(this._container);
     };
     /***
      * 不合理的地方AStar和地图耦合性强，只能在main里面调用
@@ -228,14 +237,15 @@ var Main = (function (_super) {
         var _this = this;
         var idle = new Idle(this.user.role, this.idlelist);
         var walk = new Walk(this.user.role, this.walklist);
-        this.touchEnabled = true;
-        this.parent.stage.addEventListener(egret.TouchEvent.TOUCH_TAP, function (evt) {
+        this.map.touchEnabled = true;
+        this.map.addEventListener(egret.TouchEvent.TOUCH_TAP, function (evt) {
             _this.setAstar();
-            _this._bg._astar.setStartNode(Math.floor((_this.user.role.x) / 100), Math.floor(_this.user.role.y / 100));
+            console.log("map tap");
+            _this.map._astar.setStartNode(Math.floor((_this.user.role.x) / 100), Math.floor(_this.user.role.y / 100));
             //this._bg._astar.setStartNode(Math.floor(this._player.x/100),Math.floor(this._player.y/100));
             //this._bg._astar.setEndNode(Math.floor(evt.stageX/100),Math.floor(evt.stageY/100));
-            _this._bg._astar.setEndNode(Math.floor((evt.stageX + _this.map_Grid) / 100), Math.floor(evt.stageY / 100));
-            var i = _this._bg._astar.findPath();
+            _this.map._astar.setEndNode(Math.floor((evt.stageX + _this.map_Grid) / 100), Math.floor(evt.stageY / 100));
+            var i = _this.map._astar.findPath();
             if (i == 1) {
                 _this.user.role.SetState(walk);
                 //egret.Tween.removeTweens(this._player);
@@ -256,8 +266,8 @@ var Main = (function (_super) {
             }
         }, this);
         egret.startTick(function () {
-            if (_this._bg._astar._path[0] != null) {
-                if (_this.user.role.x == (_this._bg._astar._path[0].x) * _this._bg.MapSize + 50 && _this.user.role.y == _this._bg._astar._path[0].y * _this._bg.MapSize + 50) {
+            if (_this.map._astar._path[0] != null) {
+                if (_this.user.role.x == (_this.map._astar._path[0].x) * _this.map.MapSize + 50 && _this.user.role.y == _this.map._astar._path[0].y * _this.map.MapSize + 50) {
                     _this.user.role.SetState(idle);
                 }
             }
@@ -280,18 +290,18 @@ var Main = (function (_super) {
     };
     p.onEnterFrame = function (event) {
         //console.log('hi');
-        var n = this._bg._astar._path.length;
+        var n = this.map._astar._path.length;
         //console.log(n - this.i);
         if (n - this.i < 0)
             return;
-        var targetX = this._bg._astar._path[n - this.i].x * this._bg.MapSize + this._bg.MapSize / 2;
-        var targetY = this._bg._astar._path[n - this.i].y * this._bg.MapSize + this._bg.MapSize / 2;
+        var targetX = this.map._astar._path[n - this.i].x * this.map.MapSize + this.map.MapSize / 2;
+        var targetY = this.map._astar._path[n - this.i].y * this.map.MapSize + this.map.MapSize / 2;
         var dx = targetX - this.user.role.x;
         var dy = targetY - this.user.role.y;
         var dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < this.step * 2) {
             this.i++;
-            if (this.i > this._bg._astar._path.length) {
+            if (this.i > this.map._astar._path.length) {
                 this.removeEventListener(egret.Event.ENTER_FRAME, this.onEnterFrame, this);
             }
         }
@@ -317,8 +327,8 @@ var Main = (function (_super) {
     };
     p.setAstar = function () {
         egret.Tween.removeTweens(this.user.role);
-        this._bg._astar.setStartNode(Math.floor(this.user.role.x / 100), Math.floor(this.user.role.y / 100));
-        this._bg._astar.empty();
+        this.map._astar.setStartNode(Math.floor(this.user.role.x / 100), Math.floor(this.user.role.y / 100));
+        this.map._astar.empty();
         this.i = 1;
     };
     /**

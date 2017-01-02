@@ -11,7 +11,3 @@
  * 虽然用了UI层级管理器但监听还是很恶心
  * hero打开hero状态面板和后面的装备打开装备面板相同，就没做了
  */
- /***
- *单例模式：taskservice任务系统唯一，LayoutController交换container只能是对象访问，
-            Scene依赖timeMap和Astar，但这些都是对象的属性，不能用静态方法访问
- */

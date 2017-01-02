@@ -86,7 +86,7 @@ var HeroGrid = (function (_super) {
         this.contentBitmap.touchEnabled = true;
         this.contentBitmap.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             heroStatusBar.setInformation(hero);
-            LayoutController.getIntance().addLayer(LayerType.UILayer, heroStatusBar);
+            GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, heroStatusBar);
         }, this);
     };
     return HeroGrid;

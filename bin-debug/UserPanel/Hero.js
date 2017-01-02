@@ -129,7 +129,7 @@ var Hero = (function (_super) {
             heroStatusBar.setInformation(_this);
             heroStatusBar.x = 100;
             heroStatusBar.y = 100;
-            LayoutController.getIntance().addLayer(LayerType.UILayer, heroStatusBar);
+            GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, heroStatusBar);
             //console.log("点击人物");
             //this.addChild(heroBar);
             //this.swapChildren(heroBar,this._bitmap);

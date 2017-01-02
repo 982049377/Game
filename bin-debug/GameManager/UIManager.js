@@ -3,32 +3,16 @@ var LayerType;
     LayerType[LayerType["UILayer"] = 0] = "UILayer";
     LayerType[LayerType["DetailLayer"] = 1] = "DetailLayer";
 })(LayerType || (LayerType = {}));
-var LayoutController = (function (_super) {
-    __extends(LayoutController, _super);
-    function LayoutController() {
+var UIManager = (function (_super) {
+    __extends(UIManager, _super);
+    function UIManager() {
         _super.call(this);
-        LayoutController.count++;
-        if (LayoutController.count > 1)
-            throw 'singleton!!';
         this.UILayer = new egret.DisplayObjectContainer();
         this.DetailLayer = new egret.DisplayObjectContainer();
         this.addChild(this.UILayer);
         this.addChild(this.DetailLayer);
     }
-    var d = __define,c=LayoutController,p=c.prototype;
-    LayoutController.getIntance = function () {
-        if (LayoutController.instance == null) {
-            LayoutController.instance = new LayoutController();
-        }
-        return LayoutController.instance;
-    };
-    // public constructor() {
-    //     super();
-    //     this.UILayer = new egret.DisplayObjectContainer();
-    //     this.DetailLayer = new egret.DisplayObjectContainer();
-    //     this.addChild(this.UILayer);
-    //     this.addChild(this.DetailLayer);
-    // }
+    var d = __define,c=UIManager,p=c.prototype;
     p.addLayer = function (whichType, addWhat) {
         switch (whichType) {
             case LayerType.DetailLayer:
@@ -57,11 +41,7 @@ var LayoutController = (function (_super) {
         }
         return container;
     };
-    p.getIndex = function () {
-        return 1;
-    };
-    LayoutController.count = 0;
-    return LayoutController;
+    return UIManager;
 }(egret.DisplayObjectContainer));
-egret.registerClass(LayoutController,'LayoutController');
-//# sourceMappingURL=LayoutController.js.map
+egret.registerClass(UIManager,'UIManager');
+//# sourceMappingURL=UIManager.js.map

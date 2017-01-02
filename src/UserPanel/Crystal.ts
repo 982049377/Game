@@ -8,7 +8,7 @@ class Crystal extends egret.DisplayObjectContainer implements Objectdetail {
         Crystal.Id++;
         this.tempid = Crystal.Id;
         this.properties = new Property();
-        LayoutController.getIntance().addLayer(LayerType.UILayer,this.properties._bitmap);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer,this.properties._bitmap);
         //this.addChild(this.properties._bitmap);
     }
 

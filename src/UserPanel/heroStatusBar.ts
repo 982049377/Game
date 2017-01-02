@@ -170,7 +170,7 @@ class ObjectGrid extends egret.DisplayObjectContainer {
         this.contentBitmap.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
             details.setInformation(this.content);
             //this.addChild(details);
-            LayoutController.getIntance().addLayer(LayerType.DetailLayer, details);
+            GameManager.getInstance().UIManager.addLayer(LayerType.DetailLayer, details);
             //this.swapChildren(details,content.parent)
             //console.log("123456789123446587");
         }, this);
