@@ -46,18 +46,20 @@ var FightCommand = (function () {
 }());
 egret.registerClass(FightCommand,'FightCommand',["Command"]);
 var TalkCommand = (function () {
-    function TalkCommand() {
+    function TalkCommand(AimNPC) {
+        this.AimNPC = AimNPC;
     }
     var d = __define,c=TalkCommand,p=c.prototype;
     p.execute = function (callback) {
-        console.log("打开对话框");
+        this.AimNPC.OpenDialogue();
+        //console.log("打开对话框")
         egret.setTimeout(function () {
-            console.log("结束对话");
+            //console.log("结束对话")
             callback();
         }, this, 500);
     };
     p.cancel = function (callback) {
-        console.log("关闭对话框");
+        this.AimNPC.closeDialogue();
     };
     return TalkCommand;
 }());

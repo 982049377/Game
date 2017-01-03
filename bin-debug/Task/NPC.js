@@ -3,6 +3,9 @@ var NPC = (function (_super) {
     function NPC(id) {
         _super.call(this);
         this._tasklist = [];
+        //打开对话框
+        this.dialogue = new DialoguePanel();
+        this.IsDialogueOpen = false;
         this.NPCField = new egret.DisplayObjectContainer();
         this._id = id;
         //NPC形象加载  图片格式有要求305*280；
@@ -36,32 +39,44 @@ var NPC = (function (_super) {
         this.namelabel.text = this._name;
         this.getTask();
         this.responseTask();
-        this.onNPCclick();
+        this.clickNPC();
     };
     //鼠标点击
-    p.onNPCclick = function () {
+    p.clickNPC = function () {
         var _this = this;
         this._role.touchEnabled = true;
         this._role.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
-            // this.getTask();
-            // this.responseTask();
-            var task = _this.getOptimalTask();
-            var fromself = false;
-            var toself = false;
-            if (task.getfromNpcId() == _this._id)
-                fromself = true;
-            if (task.gettoNpcId() == _this._id)
-                toself = true;
-            var dialogue = new DialoguePanel();
-            dialogue.anchorOffsetX = dialogue.width / 2;
-            dialogue.anchorOffsetY = dialogue.height / 2;
-            dialogue.x = _this.parent.stage.width / 2 - _this.x;
-            dialogue.y = _this.parent.stage.height / 2 - _this.y;
-            dialogue.call(task, fromself, toself);
-            _this.addChild(dialogue);
-            _this.getTask();
-            _this.responseTask();
+            var list = new CommandList();
+            var walk = new WalkCommand(_this.x, _this.y);
+            var talk = new TalkCommand(_this);
+            list.addCommand(walk);
+            list.addCommand(talk);
+            list.execute();
         }, this);
+    };
+    p.OpenDialogue = function () {
+        var task = this.getOptimalTask();
+        var fromself = false;
+        var toself = false;
+        if (task.getfromNpcId() == this._id)
+            fromself = true;
+        if (task.gettoNpcId() == this._id)
+            toself = true;
+        this.dialogue.anchorOffsetX = this.dialogue.width / 2;
+        this.dialogue.anchorOffsetY = this.dialogue.height / 2;
+        this.dialogue.x = this.parent.stage.width / 2 - this.x;
+        this.dialogue.y = this.parent.stage.height / 2 - this.y;
+        this.dialogue.call(task, fromself, toself);
+        this.addChild(this.dialogue);
+        this.IsDialogueOpen = true;
+        this.getTask();
+        this.responseTask();
+    };
+    p.closeDialogue = function () {
+        if (this.IsDialogueOpen = true)
+            this.removeChild(this.dialogue);
+        else
+            console.error("对话框并没有打开，无法关闭");
     };
     p.getOptimalTask = function () {
         var task;

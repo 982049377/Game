@@ -58,9 +58,8 @@ class TalkCommand implements Command {
     constructor(AimNPC: NPC) {
         this.AimNPC = AimNPC;
     }
-
     execute(callback: Function): void {
-        this.AimNPC.onNPCclick();
+        this.AimNPC.OpenDialogue();
         //console.log("打开对话框")
         egret.setTimeout(function () {
             //console.log("结束对话")

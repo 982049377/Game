@@ -52,32 +52,39 @@ class NPC extends egret.DisplayObjectContainer implements Observer {
         this.namelabel.text = this._name;
         this.getTask();
         this.responseTask();
-        this.onNPCclick();
+        this.clickNPC();
     }
     //鼠标点击
+    public clickNPC(){
+        this._role.touchEnabled=true;
+        this._role.addEventListener(egret.TouchEvent.TOUCH_TAP,()=>{
+            var list =new CommandList();
+            var walk = new WalkCommand(this.x,this.y);
+            var talk=new TalkCommand(this);
+            list.addCommand(walk);
+            list.addCommand(talk);
+            list.execute();
+        },this)
+    }
+    //打开对话框
     private dialogue = new DialoguePanel();
     private IsDialogueOpen = false;
-    public onNPCclick() {
-        this._role.touchEnabled = true;
-        this._role.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-            // this.getTask();
-            // this.responseTask();
-            var task = this.getOptimalTask();
-            var fromself: boolean = false;
-            var toself: boolean = false;
-            if (task.getfromNpcId() == this._id) fromself = true;
-            if (task.gettoNpcId() == this._id) toself = true;
+    public OpenDialogue() {
+        var task = this.getOptimalTask();
+        var fromself: boolean = false;
+        var toself: boolean = false;
+        if (task.getfromNpcId() == this._id) fromself = true;
+        if (task.gettoNpcId() == this._id) toself = true;
 
-            this.dialogue.anchorOffsetX = this.dialogue.width / 2;
-            this.dialogue.anchorOffsetY = this.dialogue.height / 2;
-            this.dialogue.x = this.parent.stage.width / 2 - this.x;
-            this.dialogue.y = this.parent.stage.height / 2 - this.y;
-            this.dialogue.call(task, fromself, toself);
-            this.addChild(this.dialogue);
-            this.IsDialogueOpen = true;
-            this.getTask();
-            this.responseTask();
-        }, this);
+        this.dialogue.anchorOffsetX = this.dialogue.width / 2;
+        this.dialogue.anchorOffsetY = this.dialogue.height / 2;
+        this.dialogue.x = this.parent.stage.width / 2 - this.x;
+        this.dialogue.y = this.parent.stage.height / 2 - this.y;
+        this.dialogue.call(task, fromself, toself);
+        this.addChild(this.dialogue);
+        this.IsDialogueOpen = true;
+        this.getTask();
+        this.responseTask();
     }
     public closeDialogue() {
         if (this.IsDialogueOpen = true)

@@ -12,6 +12,7 @@ var game_file_list = [
 	"bin-debug/Astar/Grid.js",
 	"bin-debug/Astar/TileMap.js",
 	"bin-debug/Command/Command.js",
+	"bin-debug/Command/CommandList.js",
 	"bin-debug/GameManager/GameManager.js",
 	"bin-debug/GameManager/SceneManager.js",
 	"bin-debug/GameManager/UIManager.js",

@@ -286,7 +286,6 @@ class Main extends egret.DisplayObjectContainer {
             walkCommand.execute(ss);
             console.log("1111111111111111111111111111111")
         }, this);
-
     }
     private prevX: number = 0;
     private map_Grid = 0;
