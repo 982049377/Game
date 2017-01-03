@@ -6,6 +6,8 @@ class GameScene extends egret.DisplayObjectContainer {
         this.user = User.getInstance();
         this.idle = new Idle(this.user.role, User.idlelist);
         this.walk = new Walk(this.user.role, User.walklist);
+        this.mapMove();
+        GameScene.mapOffsetX = 0;
     }
     public replaceamap(map: TileMap) {
         this.map = map;
@@ -36,7 +38,7 @@ class GameScene extends egret.DisplayObjectContainer {
         this.clearAstar();
     }
 
-    private map_Grid = 0;
+    public static mapOffsetX = 0;
     private offsetx: number;
     private user: User;
     private idle: Idle;
@@ -45,7 +47,8 @@ class GameScene extends egret.DisplayObjectContainer {
 
         this.clearAstar();
         this.map._astar.setStartNode(Math.floor((this.user.role.x) / 100), Math.floor(this.user.role.y / 100));
-        this.map._astar.setEndNode(Math.floor((DestinationX + this.map_Grid) / 100), Math.floor(DestinationY / 100));
+        this.map._astar.setEndNode(Math.floor((DestinationX + GameScene.mapOffsetX) / 100), Math.floor(DestinationY / 100));
+        console.log("DestinationX" + Math.floor((DestinationX + GameScene.mapOffsetX) / 100));
         var i = this.map._astar.findPath();
         if (i == 1) {
             this.user.role.SetState(this.walk)
@@ -115,6 +118,41 @@ class GameScene extends egret.DisplayObjectContainer {
         this.map._astar.empty();
         this.i = 1;
     }
+    /***地图 */
+    private mapMove() {
+
+
+        this.map.parent.touchEnabled = true;
+        this.map.parent.addEventListener(egret.TouchEvent.TOUCH_BEGIN, (e: egret.TouchEvent) => {
+            this.prevX = e.stageX;
+            //this.offsetx=e.stageX-this._bg.x;
+            this.map.parent.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onMove, this);
+            //console.log("mapmove");
+        }, this);
+        this.map.parent.addEventListener(egret.TouchEvent.TOUCH_END, () => {
+            this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onMove, this);
+        }, this)
+    }
+
+
+    private prevX: number = 0;
+    private onMove(e: egret.TouchEvent) {
+        //this._bg.x+=offsetx;
+        //console.log("onMove");
+        this.offsetx = this.prevX - e.stageX;
+        //console.log("mapMove");
+        if (this.offsetx > 100) {
+            egret.Tween.get(this.map.parent).to({ x: -360 }, 200);
+
+            GameScene.mapOffsetX = 360;
+        }
+        if (this.offsetx < -100) {
+            //console.log("12345789465413213212313");
+            egret.Tween.get(this.map.parent).to({ x: 0 }, 200)
+            GameScene.mapOffsetX = 0;
+        }
+    }
+
 }
 
 class SecneManager {

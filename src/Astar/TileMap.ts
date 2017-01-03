@@ -124,7 +124,6 @@ class TileMap extends egret.DisplayObjectContainer{
         {x:9,y:8,WalkAble:false,image:"water_jpg"},
         {x:9,y:9,WalkAble:true,image:"road_jpg"},
     ];
-  
     public Create(){
        this._grid= new Grid(10,10);
         var Container=new egret.DisplayObjectContainer();

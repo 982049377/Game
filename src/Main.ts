@@ -173,7 +173,7 @@ class Main extends egret.DisplayObjectContainer {
         //this.addChild(this._container);
 
         this.walkByTap();
-        this.mapMove();
+        //this.mapMove();
 
 
 
@@ -217,8 +217,8 @@ class Main extends egret.DisplayObjectContainer {
         // this._container.addChild(NPC2);
         GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, NPC1);
         GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, NPC2);
-        NPC1.x = 580; NPC1.y = 400;
-        NPC2.x = 870; NPC2.y = 800;
+        NPC1.x = 500; NPC1.y = 400;
+        NPC2.x = 900; NPC2.y = 900;
 
         var TaskPanelLogo: egret.Bitmap = new egret.Bitmap();
         TaskPanelLogo.texture = RES.getRes("TaskPanelLogo_png");
@@ -263,48 +263,17 @@ class Main extends egret.DisplayObjectContainer {
      * 虽然用了UI层级管理器但监听还是很恶心
      * hero打开hero状态面板和后面的装备打开装备面板相同，就没做了
      */
-    /***地图 */
-    private mapMove() {
-
-
-        this._container.touchEnabled = true;
-        this._container.addEventListener(egret.TouchEvent.TOUCH_BEGIN, (e: egret.TouchEvent) => {
-            this.prevX = e.stageX;
-            //this.offsetx=e.stageX-this._bg.x;
-            this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onMove, this)
-        }, this);
-        this.addEventListener(egret.TouchEvent.TOUCH_END, () => {
-            this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onMove, this);
-        }, this)
-    }
-
+    
     private walkByTap() {
         function ss() { }
         this.map.touchEnabled = true;
         this.map.addEventListener(egret.TouchEvent.TOUCH_TAP, (evt: egret.TouchEvent) => {
             var walkCommand = new WalkCommand(evt.stageX, evt.stageY);
             walkCommand.execute(ss);
-            console.log("1111111111111111111111111111111")
+            console.log("x"+evt.stageX+"y"+evt.stageY);
         }, this);
     }
-    private prevX: number = 0;
-    private map_Grid = 0;
-    private offsetx: number;
-    private onMove(e: egret.TouchEvent) {
-        //this._bg.x+=offsetx;
-        //console.log("onMove");
-        this.offsetx = this.prevX - e.stageX;
-        if (this.offsetx > 0) {
-            egret.Tween.get(this._container).to({ x: -360 }, 200);
-            this.map_Grid = 360;
-        }
-        if (this.offsetx < 0) {
-            //console.log("12345789465413213212313");
-            egret.Tween.get(this._container).to({ x: 0 }, 200)
-            this.map_Grid = 0;
-        }
-    }
-
+   
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
      * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.

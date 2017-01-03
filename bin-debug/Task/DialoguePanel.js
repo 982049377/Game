@@ -35,7 +35,7 @@ var DialoguePanel = (function (_super) {
         this._container.addChild(this._firstbutton);
         this._container.addChild(this._giveUpButton);
         this._container.addChild(this._returnButton);
-        this.addChild(this._container);
+        //this.addChild(this._container);
     }
     var d = __define,c=DialoguePanel,p=c.prototype;
     p.call = function (task, fromself, toself) {

@@ -47,11 +47,12 @@ var NPC = (function (_super) {
         this._role.touchEnabled = true;
         this._role.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             var list = new CommandList();
-            var walk = new WalkCommand(_this.x, _this.y);
+            var walk = new WalkCommand(_this.x - GameScene.mapOffsetX, _this.y);
             var talk = new TalkCommand(_this);
             list.addCommand(walk);
             list.addCommand(talk);
             list.execute();
+            console.log("this.role chick");
         }, this);
     };
     p.OpenDialogue = function () {

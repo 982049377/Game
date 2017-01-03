@@ -31,8 +31,6 @@ var Main = (function (_super) {
     //public sssssss;
     function Main() {
         _super.call(this);
-        this.prevX = 0;
-        this.map_Grid = 0;
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }
     var d = __define,c=Main,p=c.prototype;
@@ -132,7 +130,7 @@ var Main = (function (_super) {
         this.user.setinformation("982049377", User.idlelist, User.walklist);
         //this.addChild(this._container);
         this.walkByTap();
-        this.mapMove();
+        //this.mapMove();
         var guanyu = new Hero();
         var bitmap = tool.createBitmapByName("001_png");
         guanyu.setinformation("001", "关羽", 95, 85, heroQualitySort.S, bitmap);
@@ -167,10 +165,10 @@ var Main = (function (_super) {
         // this._container.addChild(NPC2);
         GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, NPC1);
         GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, NPC2);
-        NPC1.x = 580;
+        NPC1.x = 500;
         NPC1.y = 400;
-        NPC2.x = 870;
-        NPC2.y = 800;
+        NPC2.x = 900;
+        NPC2.y = 900;
         var TaskPanelLogo = new egret.Bitmap();
         TaskPanelLogo.texture = RES.getRes("TaskPanelLogo_png");
         TaskPanelLogo.x = 100;
@@ -210,41 +208,14 @@ var Main = (function (_super) {
      * 虽然用了UI层级管理器但监听还是很恶心
      * hero打开hero状态面板和后面的装备打开装备面板相同，就没做了
      */
-    /***地图 */
-    p.mapMove = function () {
-        var _this = this;
-        this._container.touchEnabled = true;
-        this._container.addEventListener(egret.TouchEvent.TOUCH_BEGIN, function (e) {
-            _this.prevX = e.stageX;
-            //this.offsetx=e.stageX-this._bg.x;
-            _this.addEventListener(egret.TouchEvent.TOUCH_MOVE, _this.onMove, _this);
-        }, this);
-        this.addEventListener(egret.TouchEvent.TOUCH_END, function () {
-            _this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, _this.onMove, _this);
-        }, this);
-    };
     p.walkByTap = function () {
         function ss() { }
         this.map.touchEnabled = true;
         this.map.addEventListener(egret.TouchEvent.TOUCH_TAP, function (evt) {
             var walkCommand = new WalkCommand(evt.stageX, evt.stageY);
             walkCommand.execute(ss);
-            console.log("1111111111111111111111111111111");
+            console.log("x" + evt.stageX + "y" + evt.stageY);
         }, this);
-    };
-    p.onMove = function (e) {
-        //this._bg.x+=offsetx;
-        //console.log("onMove");
-        this.offsetx = this.prevX - e.stageX;
-        if (this.offsetx > 0) {
-            egret.Tween.get(this._container).to({ x: -360 }, 200);
-            this.map_Grid = 360;
-        }
-        if (this.offsetx < 0) {
-            //console.log("12345789465413213212313");
-            egret.Tween.get(this._container).to({ x: 0 }, 200);
-            this.map_Grid = 0;
-        }
     };
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。

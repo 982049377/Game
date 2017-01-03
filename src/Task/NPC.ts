@@ -59,11 +59,12 @@ class NPC extends egret.DisplayObjectContainer implements Observer {
         this._role.touchEnabled=true;
         this._role.addEventListener(egret.TouchEvent.TOUCH_TAP,()=>{
             var list =new CommandList();
-            var walk = new WalkCommand(this.x,this.y);
+            var walk = new WalkCommand(this.x-GameScene.mapOffsetX,this.y);
             var talk=new TalkCommand(this);
             list.addCommand(walk);
             list.addCommand(talk);
             list.execute();
+            console.log("this.role chick");
         },this)
     }
     //打开对话框
@@ -80,6 +81,7 @@ class NPC extends egret.DisplayObjectContainer implements Observer {
         this.dialogue.anchorOffsetY = this.dialogue.height / 2;
         this.dialogue.x = this.parent.stage.width / 2 - this.x;
         this.dialogue.y = this.parent.stage.height / 2 - this.y;
+        
         this.dialogue.call(task, fromself, toself);
         this.addChild(this.dialogue);
         this.IsDialogueOpen = true;

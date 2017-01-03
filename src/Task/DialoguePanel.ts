@@ -53,7 +53,7 @@ class DialoguePanel extends egret.DisplayObjectContainer{
         this._container.addChild(this._firstbutton);
         this._container.addChild(this._giveUpButton);
         this._container.addChild(this._returnButton);
-        this.addChild(this._container);
+        //this.addChild(this._container);
     }
     public call(task:Task,fromself:boolean,toself:boolean){
         this._background.texture=RES.getRes("Taskbg_png");
