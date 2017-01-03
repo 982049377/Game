@@ -270,7 +270,7 @@ class Main extends egret.DisplayObjectContainer {
         this.map.addEventListener(egret.TouchEvent.TOUCH_TAP, (evt: egret.TouchEvent) => {
             var walkCommand = new WalkCommand(evt.stageX, evt.stageY);
             walkCommand.execute(ss);
-            console.log("x"+evt.stageX+"y"+evt.stageY);
+            //console.log("x"+evt.stageX+"y"+evt.stageY);
         }, this);
     }
    

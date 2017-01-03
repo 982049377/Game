@@ -53,19 +53,21 @@ class NPC extends egret.DisplayObjectContainer implements Observer {
         this.getTask();
         this.responseTask();
         this.clickNPC();
+        //this.addChild(this.dialogue);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, this.dialogue);
     }
     //鼠标点击
-    public clickNPC(){
-        this._role.touchEnabled=true;
-        this._role.addEventListener(egret.TouchEvent.TOUCH_TAP,()=>{
-            var list =new CommandList();
-            var walk = new WalkCommand(this.x-GameScene.mapOffsetX,this.y);
-            var talk=new TalkCommand(this);
+    public clickNPC() {
+        this._role.touchEnabled = true;
+        this._role.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
+            var list = new CommandList();
+            var walk = new WalkCommand(this.x - GameScene.mapOffsetX, this.y);
+            var talk = new TalkCommand(this);
             list.addCommand(walk);
             list.addCommand(talk);
             list.execute();
-            console.log("this.role chick");
-        },this)
+            //console.log("this.role chick");
+        }, this)
     }
     //打开对话框
     private dialogue = new DialoguePanel();
@@ -81,16 +83,18 @@ class NPC extends egret.DisplayObjectContainer implements Observer {
         this.dialogue.anchorOffsetY = this.dialogue.height / 2;
         this.dialogue.x = this.parent.stage.width / 2 - this.x;
         this.dialogue.y = this.parent.stage.height / 2 - this.y;
-        
+
         this.dialogue.call(task, fromself, toself);
-        this.addChild(this.dialogue);
+        //this.addChild(this.dialogue._container);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, this.dialogue._container);
         this.IsDialogueOpen = true;
         this.getTask();
         this.responseTask();
     }
     public closeDialogue() {
         if (this.IsDialogueOpen = true)
-            this.removeChild(this.dialogue);
+           // this.removeChild(this.dialogue._container);
+            GameManager.getInstance().UIManager.removeLayer(LayerType.UILayer, this.dialogue._container);
         else
             console.error("对话框并没有打开，无法关闭");
     }
@@ -127,7 +131,7 @@ class NPC extends egret.DisplayObjectContainer implements Observer {
                             break;
                         case statusType.Acceptable:
                             task = this._tasklist[s];
-                            console.log("提交");
+                            //console.log("提交");
                             break;
                         case statusType.Cancomplete:
                             break;

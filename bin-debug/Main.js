@@ -214,7 +214,7 @@ var Main = (function (_super) {
         this.map.addEventListener(egret.TouchEvent.TOUCH_TAP, function (evt) {
             var walkCommand = new WalkCommand(evt.stageX, evt.stageY);
             walkCommand.execute(ss);
-            console.log("x" + evt.stageX + "y" + evt.stageY);
+            //console.log("x"+evt.stageX+"y"+evt.stageY);
         }, this);
     };
     /**

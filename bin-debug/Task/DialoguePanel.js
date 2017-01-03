@@ -5,6 +5,8 @@ var DialoguePanel = (function (_super) {
         this._container = new egret.DisplayObjectContainer();
         this._container.width = 300;
         this._container.height = 425;
+        this._container.x = 0;
+        this._container.y = 0;
         this._textfield = new egret.TextField();
         this._textfield.size = 36;
         this._textfield.width = 220;
@@ -93,6 +95,7 @@ var DialoguePanel = (function (_super) {
         var _this = this;
         this._returnButton.touchEnabled = true;
         this._returnButton.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+            _this.addChild(_this._container); //不确定上一次移除了几次，再加一个然后remove
             _this.removeChild(_this._container);
         }, this);
     };

@@ -45,7 +45,7 @@ var GameScene = (function (_super) {
         this.clearAstar();
         this.map._astar.setStartNode(Math.floor((this.user.role.x) / 100), Math.floor(this.user.role.y / 100));
         this.map._astar.setEndNode(Math.floor((DestinationX + GameScene.mapOffsetX) / 100), Math.floor(DestinationY / 100));
-        console.log("DestinationX" + Math.floor((DestinationX + GameScene.mapOffsetX) / 100));
+        //console.log("DestinationX" + Math.floor((DestinationX + GameScene.mapOffsetX) / 100));
         var i = this.map._astar.findPath();
         if (i == 1) {
             this.user.role.SetState(this.walk);

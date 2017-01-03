@@ -19,9 +19,24 @@ class UIManager extends egret.DisplayObjectContainer {
         switch (whichType) {
             case LayerType.DetailLayer:
                 this.DetailLayer.addChild(addWhat);
+                addWhat.x = GameScene.mapOffsetX;
                 break;
             case LayerType.UILayer:
                 this.UILayer.addChild(addWhat);
+                addWhat.x = GameScene.mapOffsetX;
+                break;
+        }
+    }
+
+    public removeLayer(whichType: LayerType, addWhat: any) {
+        switch (whichType) {
+            case LayerType.DetailLayer:
+                this.DetailLayer.addChild(addWhat);
+                this.DetailLayer.removeChild(addWhat);
+                break;
+            case LayerType.UILayer:
+                this.UILayer.addChild(addWhat);
+                this.UILayer.removeChild(addWhat);
                 break;
         }
     }

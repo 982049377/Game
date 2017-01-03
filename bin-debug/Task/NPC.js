@@ -40,6 +40,8 @@ var NPC = (function (_super) {
         this.getTask();
         this.responseTask();
         this.clickNPC();
+        //this.addChild(this.dialogue);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, this.dialogue);
     };
     //鼠标点击
     p.clickNPC = function () {
@@ -52,7 +54,7 @@ var NPC = (function (_super) {
             list.addCommand(walk);
             list.addCommand(talk);
             list.execute();
-            console.log("this.role chick");
+            //console.log("this.role chick");
         }, this);
     };
     p.OpenDialogue = function () {
@@ -68,14 +70,16 @@ var NPC = (function (_super) {
         this.dialogue.x = this.parent.stage.width / 2 - this.x;
         this.dialogue.y = this.parent.stage.height / 2 - this.y;
         this.dialogue.call(task, fromself, toself);
-        this.addChild(this.dialogue);
+        //this.addChild(this.dialogue._container);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, this.dialogue._container);
         this.IsDialogueOpen = true;
         this.getTask();
         this.responseTask();
     };
     p.closeDialogue = function () {
         if (this.IsDialogueOpen = true)
-            this.removeChild(this.dialogue);
+            // this.removeChild(this.dialogue._container);
+            GameManager.getInstance().UIManager.removeLayer(LayerType.UILayer, this.dialogue._container);
         else
             console.error("对话框并没有打开，无法关闭");
     };
@@ -111,7 +115,7 @@ var NPC = (function (_super) {
                             break;
                         case statusType.Acceptable:
                             task = this._tasklist[s];
-                            console.log("提交");
+                            //console.log("提交");
                             break;
                         case statusType.Cancomplete:
                             break;

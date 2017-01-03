@@ -17,9 +17,23 @@ var UIManager = (function (_super) {
         switch (whichType) {
             case LayerType.DetailLayer:
                 this.DetailLayer.addChild(addWhat);
+                addWhat.x = GameScene.mapOffsetX;
                 break;
             case LayerType.UILayer:
                 this.UILayer.addChild(addWhat);
+                addWhat.x = GameScene.mapOffsetX;
+                break;
+        }
+    };
+    p.removeLayer = function (whichType, addWhat) {
+        switch (whichType) {
+            case LayerType.DetailLayer:
+                this.DetailLayer.addChild(addWhat);
+                this.DetailLayer.removeChild(addWhat);
+                break;
+            case LayerType.UILayer:
+                this.UILayer.addChild(addWhat);
+                this.UILayer.removeChild(addWhat);
                 break;
         }
     };
