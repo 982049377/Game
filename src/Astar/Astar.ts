@@ -63,7 +63,7 @@ class Astar
             if ( m.x == this._endx && m.y == this._endy )  
             {  
                 console.log("起点==终点！\n"); 
-                return 0; 
+                //return 0; 
             }  
       
             var is_found = false;  

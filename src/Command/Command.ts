@@ -31,13 +31,16 @@ class FightCommand implements Command {
      * 所有的 Command 都需要有这个标记，应该如何封装处理这个问题呢？
      */
     private _hasBeenCancelled = false;
-
+    private sceneService: SceneService = GameManager.getInstance().secneManager.currentScene;
+    //i = 0;
     execute(callback: Function): void {
-
-        console.log("开始战斗")
+        //this.i++;
+        this.sceneService.notify("002");
+        //console.log(this.i);
+        // console.log("开始战斗")
         egret.setTimeout(() => {
             if (!this._hasBeenCancelled) {
-                console.log("结束战斗")
+                // console.log("结束战斗")
                 callback();
             }
         }, this, 500)

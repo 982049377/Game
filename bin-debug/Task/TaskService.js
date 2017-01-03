@@ -65,6 +65,13 @@ var TaskService = (function () {
             s.onchange(this._tasklist[id]);
         }
     };
+    p.KillMonster = function (id) {
+        if (this._tasklist[id] == null) {
+            throw '没有这个任务';
+        }
+        this._tasklist[id].setcurrent();
+        this.notify(id);
+    };
     TaskService.count = 0;
     return TaskService;
 }());

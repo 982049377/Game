@@ -135,10 +135,16 @@ var GameScene = (function (_super) {
             GameScene.mapOffsetX = 0;
         }
     };
+    p.addObserver = function (observer) {
+    };
+    p.notify = function (id) {
+        //var task=TaskService.getIntance()._tasklist[id];
+        TaskService.getIntance().KillMonster(id);
+    };
     GameScene.mapOffsetX = 0;
     return GameScene;
 }(egret.DisplayObjectContainer));
-egret.registerClass(GameScene,'GameScene');
+egret.registerClass(GameScene,'GameScene',["EventEmitter"]);
 var SecneManager = (function () {
     function SecneManager() {
         this.Scenelist = new Array();

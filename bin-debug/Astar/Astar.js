@@ -51,7 +51,6 @@ var Astar = (function () {
         //    console.log(m.x+"0.123"+m.y);       
         if (m.x == this._endx && m.y == this._endy) {
             console.log("起点==终点！\n");
-            return 0;
         }
         var is_found = false;
         while (true) {

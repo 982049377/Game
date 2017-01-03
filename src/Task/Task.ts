@@ -8,7 +8,7 @@ class Task implements TaskConditionContext {
     private _total: number = -1;
     private _fromNpcId: string;
     private _toNpcId: string;
-    private _condition: TaskCondition;
+    public _condition: TaskCondition;
 // preid:string,
     public static Task_LIST:{[index:string]:{name:string,dris:string,fromNPCid:string,toNPCid:string,total:number,TaskCondition:string,toid:string}} = {
         "001":{ name:"初识冒险者",
@@ -18,7 +18,7 @@ class Task implements TaskConditionContext {
                 total:1,
                 TaskCondition:"NPCTalkTaskCondition",
                 toid:"002"},//甘宁
-        "002":{ name:"陆逊",
+        "002":{ name:"战斗",
                 dris:"攻打强敌10次",
                 fromNPCid:"02",
                 toNPCid:"01",

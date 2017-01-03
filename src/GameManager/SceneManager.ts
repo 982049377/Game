@@ -1,4 +1,4 @@
-class GameScene extends egret.DisplayObjectContainer {
+class GameScene extends egret.DisplayObjectContainer implements EventEmitter {
     public map: TileMap;
     constructor(map: TileMap) {
         super();
@@ -153,7 +153,17 @@ class GameScene extends egret.DisplayObjectContainer {
         }
     }
 
+    public addObserver(observer: Observer) {
+    }
+
+    public notify(id: string) {
+        //var task=TaskService.getIntance()._tasklist[id];
+        TaskService.getIntance().KillMonster(id)
+    }
 }
+
+
+
 
 class SecneManager {
     currentScene: GameScene;

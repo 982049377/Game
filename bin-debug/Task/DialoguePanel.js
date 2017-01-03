@@ -41,31 +41,32 @@ var DialoguePanel = (function (_super) {
     }
     var d = __define,c=DialoguePanel,p=c.prototype;
     p.call = function (task, fromself, toself) {
+        this.task = task;
         this._background.texture = RES.getRes("Taskbg_png");
         //console.log("Dialogue.call");
-        this._textfield.text = task.getname();
+        this._textfield.text = this.task.getname();
         this._textfield.text += "\n";
-        this._textfield.text += task.getdris();
+        this._textfield.text += this.task.getdris();
         //console.log(this._textfield.text);
-        this._firstbutton.texture = RES.getRes(this.getfirsttexture(task, fromself, toself));
-        this._giveUpButton.texture = RES.getRes(this.getGiveUpTexture(task, fromself, toself));
+        this._firstbutton.texture = RES.getRes(this.getfirsttexture(this.task, fromself, toself));
+        this._giveUpButton.texture = RES.getRes(this.getGiveUpTexture(this.task, fromself, toself));
         this._returnButton.texture = RES.getRes(DialoguePanel.texturelist["退出"]);
         this.addChild(this._container);
-        this.firstButtonlistener(task);
-        this.giveUpButtonlistener(task, fromself, toself);
+        this.firstButtonlistener();
+        this.giveUpButtonlistener(this.task, fromself, toself);
         this.returnButtonlistener();
     };
-    p.firstButtonlistener = function (task) {
+    p.firstButtonlistener = function () {
         var _this = this;
         this._firstbutton.touchEnabled = true;
         this._firstbutton.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             if (_this._firstbutton.texture == RES.getRes(DialoguePanel.texturelist["接受"])) {
-                TaskService.getIntance().accept(task.getid());
+                TaskService.getIntance().accept(_this.task.getid());
                 _this._firstbutton.texture = RES.getRes(DialoguePanel.texturelist["不能接受"]);
                 _this._giveUpButton.texture = RES.getRes(DialoguePanel.texturelist["放弃"]);
             }
             if (_this._firstbutton.texture == RES.getRes(DialoguePanel.texturelist["提交"])) {
-                TaskService.getIntance().finish(task.getid());
+                TaskService.getIntance().finish(_this.task.getid());
                 _this._firstbutton.texture = RES.getRes(DialoguePanel.texturelist["不能提交"]);
                 _this._giveUpButton.texture = RES.getRes(DialoguePanel.texturelist["不能放弃"]);
             }

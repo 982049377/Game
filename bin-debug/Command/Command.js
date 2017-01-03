@@ -23,14 +23,19 @@ var FightCommand = (function () {
          * 所有的 Command 都需要有这个标记，应该如何封装处理这个问题呢？
          */
         this._hasBeenCancelled = false;
+        this.sceneService = GameManager.getInstance().secneManager.currentScene;
     }
     var d = __define,c=FightCommand,p=c.prototype;
+    //i = 0;
     p.execute = function (callback) {
         var _this = this;
-        console.log("开始战斗");
+        //this.i++;
+        this.sceneService.notify("002");
+        //console.log(this.i);
+        // console.log("开始战斗")
         egret.setTimeout(function () {
             if (!_this._hasBeenCancelled) {
-                console.log("结束战斗");
+                // console.log("结束战斗")
                 callback();
             }
         }, this, 500);

@@ -48,13 +48,17 @@ var NPC = (function (_super) {
         var _this = this;
         this._role.touchEnabled = true;
         this._role.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
+            // this.getTask();
+            // this.responseTask();
             var list = new CommandList();
-            var walk = new WalkCommand(_this.x - GameScene.mapOffsetX, _this.y);
+            var walk = new WalkCommand(_this.x - GameScene.mapOffsetX, _this.y); ///////////////////////////////////////////////////
             var talk = new TalkCommand(_this);
             list.addCommand(walk);
             list.addCommand(talk);
             list.execute();
             //console.log("this.role chick");
+            _this.getTask();
+            _this.responseTask();
         }, this);
     };
     p.OpenDialogue = function () {

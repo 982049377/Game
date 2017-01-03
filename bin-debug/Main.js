@@ -171,12 +171,13 @@ var Main = (function (_super) {
         NPC2.y = 900;
         var TaskPanelLogo = new egret.Bitmap();
         TaskPanelLogo.texture = RES.getRes("TaskPanelLogo_png");
-        TaskPanelLogo.x = 100;
-        TaskPanelLogo.y = 500;
+        TaskPanelLogo.x = 350;
+        TaskPanelLogo.y = 1000;
         TaskPanelLogo.scaleX = 0.5;
         TaskPanelLogo.scaleY = 0.5;
         //this._container.addChild(TaskPanelLogo);
-        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, TaskPanelLogo);
+        //GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, TaskPanelLogo);
+        //GameManager.getInstance().secneManager.currentScene.addChild(TaskPanelLogo);
         TaskPanelLogo.touchEnabled = true;
         var taskPanel = new TaskPanel();
         TaskPanelLogo.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
@@ -184,10 +185,9 @@ var Main = (function (_super) {
             taskPanel.call();
             //this._container.addChild(taskPanel);
             GameManager.getInstance().UIManager.addLayer(LayerType.DetailLayer, taskPanel);
-            taskPanel.x = 100;
-            taskPanel.y = 600;
+            // taskPanel.x = 100;
+            // taskPanel.y = 600;
         }, this);
-        var sceneService = new SceneService();
         var Monster = new egret.Bitmap();
         Monster.texture = RES.getRes("Monster_png");
         Monster.x = 400;
@@ -198,10 +198,16 @@ var Main = (function (_super) {
         GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, Monster);
         Monster.touchEnabled = true;
         Monster.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
-            sceneService.notify("002");
+            var list = new CommandList();
+            var walk = new WalkCommand(Monster.x - GameScene.mapOffsetX, Monster.y);
+            var fight = new FightCommand();
+            list.addCommand(walk);
+            list.addCommand(fight);
+            list.execute();
         }, this);
         this._container.addChild(GameManager.getInstance().UIManager);
         this.addChild(this._container);
+        this.addChild(TaskPanelLogo); //为了能移动
     };
     /***
      * 不合理的地方AStar和地图耦合性强，只能在main里面调用

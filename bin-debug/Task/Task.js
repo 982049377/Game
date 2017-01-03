@@ -94,7 +94,7 @@ var Task = (function () {
             total: 1,
             TaskCondition: "NPCTalkTaskCondition",
             toid: "002" },
-        "002": { name: "陆逊",
+        "002": { name: "战斗",
             dris: "攻打强敌10次",
             fromNPCid: "02",
             toNPCid: "01",

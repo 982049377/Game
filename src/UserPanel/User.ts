@@ -77,7 +77,8 @@ class User {
         this.role._role.touchEnabled = true;
         this.role._role.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
             heroBar.setInformation(this);
-            this.container.addChild(heroBar);
+            //this.container.addChild(heroBar);
+            GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, heroBar);
         }, this)
     }
 

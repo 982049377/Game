@@ -60,13 +60,17 @@ class NPC extends egret.DisplayObjectContainer implements Observer {
     public clickNPC() {
         this._role.touchEnabled = true;
         this._role.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
+            // this.getTask();
+            // this.responseTask();
             var list = new CommandList();
-            var walk = new WalkCommand(this.x - GameScene.mapOffsetX, this.y);
+            var walk = new WalkCommand(this.x - GameScene.mapOffsetX, this.y);///////////////////////////////////////////////////
             var talk = new TalkCommand(this);
             list.addCommand(walk);
             list.addCommand(talk);
             list.execute();
             //console.log("this.role chick");
+            this.getTask();
+            this.responseTask();
         }, this)
     }
     //打开对话框
@@ -93,7 +97,7 @@ class NPC extends egret.DisplayObjectContainer implements Observer {
     }
     public closeDialogue() {
         if (this.IsDialogueOpen = true)
-           // this.removeChild(this.dialogue._container);
+            // this.removeChild(this.dialogue._container);
             GameManager.getInstance().UIManager.removeLayer(LayerType.UILayer, this.dialogue._container);
         else
             console.error("对话框并没有打开，无法关闭");

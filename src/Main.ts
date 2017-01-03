@@ -222,12 +222,13 @@ class Main extends egret.DisplayObjectContainer {
 
         var TaskPanelLogo: egret.Bitmap = new egret.Bitmap();
         TaskPanelLogo.texture = RES.getRes("TaskPanelLogo_png");
-        TaskPanelLogo.x = 100;
-        TaskPanelLogo.y = 500;
+        TaskPanelLogo.x = 350;
+        TaskPanelLogo.y = 1000;
         TaskPanelLogo.scaleX = 0.5;
         TaskPanelLogo.scaleY = 0.5;
         //this._container.addChild(TaskPanelLogo);
-        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, TaskPanelLogo);
+        //GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, TaskPanelLogo);
+        //GameManager.getInstance().secneManager.currentScene.addChild(TaskPanelLogo);
 
         TaskPanelLogo.touchEnabled = true;
         var taskPanel = new TaskPanel();
@@ -236,11 +237,10 @@ class Main extends egret.DisplayObjectContainer {
             taskPanel.call();
             //this._container.addChild(taskPanel);
             GameManager.getInstance().UIManager.addLayer(LayerType.DetailLayer, taskPanel);
-            taskPanel.x = 100;
-            taskPanel.y = 600;
+            // taskPanel.x = 100;
+            // taskPanel.y = 600;
         }, this);
 
-        var sceneService: SceneService = new SceneService();
 
         var Monster: egret.Bitmap = new egret.Bitmap();
         Monster.texture = RES.getRes("Monster_png");
@@ -253,17 +253,23 @@ class Main extends egret.DisplayObjectContainer {
 
         Monster.touchEnabled = true;
         Monster.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-            sceneService.notify("002");
+            var list = new CommandList();
+            var walk = new WalkCommand(Monster.x - GameScene.mapOffsetX, Monster.y);
+            var fight = new FightCommand();
+            list.addCommand(walk);
+            list.addCommand(fight);
+            list.execute();
         }, this);
         this._container.addChild(GameManager.getInstance().UIManager);
         this.addChild(this._container);
+        this.addChild(TaskPanelLogo);//为了能移动
     }
     /***
      * 不合理的地方AStar和地图耦合性强，只能在main里面调用
      * 虽然用了UI层级管理器但监听还是很恶心
      * hero打开hero状态面板和后面的装备打开装备面板相同，就没做了
      */
-    
+
     private walkByTap() {
         function ss() { }
         this.map.touchEnabled = true;
@@ -273,7 +279,7 @@ class Main extends egret.DisplayObjectContainer {
             //console.log("x"+evt.stageX+"y"+evt.stageY);
         }, this);
     }
-   
+
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
      * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.

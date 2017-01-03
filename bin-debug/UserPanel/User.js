@@ -70,7 +70,8 @@ var User = (function () {
         this.role._role.touchEnabled = true;
         this.role._role.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
             heroBar.setInformation(_this);
-            _this.container.addChild(heroBar);
+            //this.container.addChild(heroBar);
+            GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, heroBar);
         }, this);
     };
     p.addHero = function (hero) {
