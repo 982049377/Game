@@ -22,6 +22,9 @@ var User = (function () {
         this.gold = 0;
         this._cacheFightPower = 0;
         this.flag = false;
+        User.count++;
+        if (User.count > 1)
+            throw 'singleton!!';
         this.container = new egret.DisplayObjectContainer();
         this.role = new Role();
         this.id = "";
@@ -31,6 +34,11 @@ var User = (function () {
         this.container.addChild(this.role);
     }
     var d = __define,c=User,p=c.prototype;
+    User.getInstance = function () {
+        if (this.instance == null)
+            this.instance = new User();
+        return this.instance;
+    };
     d(p, "heroesInTeam"
         ,function () {
             return this.heros.filter(function (hero) { return hero.isInTeam; });
@@ -103,6 +111,9 @@ var User = (function () {
         }
     };
     User.heroesInTeamLimit = 5;
+    User.idlelist = ["Idle0_png", "Idle1_png", "Idle2_png", "Idle3_png"];
+    User.walklist = ["10000_png", "10001_png", "10002_png", "10003_png", "10004_png", "10005_png", "10006_png", "10007_png"];
+    User.count = 0;
     __decorate([
         Cache
     ], p, "fightPower", null);

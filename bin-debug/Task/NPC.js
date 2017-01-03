@@ -31,12 +31,14 @@ var NPC = (function (_super) {
         this.addChild(this.NPCField);
     }
     var d = __define,c=NPC,p=c.prototype;
+    //调用函数
     p.call = function () {
         this.namelabel.text = this._name;
         this.getTask();
         this.responseTask();
         this.onNPCclick();
     };
+    //鼠标点击
     p.onNPCclick = function () {
         var _this = this;
         this._role.touchEnabled = true;

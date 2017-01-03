@@ -1,115 +1,124 @@
-interface Observer{
-    onchange(task:Task);
+interface Observer {
+    onchange(task: Task);
 }
 
-class NPC extends egret.DisplayObjectContainer  implements Observer{
-    private NPCField:egret.DisplayObjectContainer;
-    private _name:string;
-    private _id:string;
-    private _role:Role;
-    private _tasklist:Task[]=[];
-    private taskresponse:egret.Bitmap;
+class NPC extends egret.DisplayObjectContainer implements Observer {
+    private NPCField: egret.DisplayObjectContainer;
+    private _name: string;
+    private _id: string;
+    private _role: Role;
+    private _tasklist: Task[] = [];
+    private taskresponse: egret.Bitmap;
     private namelabel: egret.TextField;
 
 
-    public static NPC_LIST:{[index:string]:{name:string,Flashlist:number}} = {
-        "01":{name:"甘宁",Flashlist:6},//甘宁
-        "02":{name:"陆逊",Flashlist:4} //陆逊
+    public static NPC_LIST: { [index: string]: { name: string, Flashlist: number } } = {
+        "01": { name: "甘宁", Flashlist: 6 },//甘宁
+        "02": { name: "陆逊", Flashlist: 4 } //陆逊
     }
 
 
-    public constructor(id:string){
+    public constructor(id: string) {
         super();
-        this.NPCField=new egret.DisplayObjectContainer();
-        this._id=id;
-//NPC形象加载  图片格式有要求305*280；
-        this._role=new Role();
-        this._role.call(this.CreatNPC(id),this.CreatNPC(id));
-        this._role.x=170
-        this._role.y=170;
+        this.NPCField = new egret.DisplayObjectContainer();
+        this._id = id;
+        //NPC形象加载  图片格式有要求305*280；
+        this._role = new Role();
+        this._role.call(this.CreatNPC(id), this.CreatNPC(id));
+        this._role.x = 170
+        this._role.y = 170;
         this.NPCField.addChild(this._role);
-        this.NPCField.width=this._role.width;
-        this.NPCField.height=this._role.height;
-        this._name=NPC.NPC_LIST[id].name
-//NPC头上任务反馈
-        this.taskresponse=new egret.Bitmap();   
-        this.taskresponse.scaleX=0.5;
-        this.taskresponse.scaleY=0.5;
-        this.taskresponse.x=-50;
-        this.taskresponse.y=-180;
+        this.NPCField.width = this._role.width;
+        this.NPCField.height = this._role.height;
+        this._name = NPC.NPC_LIST[id].name
+        //NPC头上任务反馈
+        this.taskresponse = new egret.Bitmap();
+        this.taskresponse.scaleX = 0.5;
+        this.taskresponse.scaleY = 0.5;
+        this.taskresponse.x = -50;
+        this.taskresponse.y = -180;
         this.NPCField.addChild(this.taskresponse);
-//namelabel相关设置
-        this.namelabel=new egret.TextField();
-        this.namelabel.x=-30;
-        this.namelabel.y=70;
+        //namelabel相关设置
+        this.namelabel = new egret.TextField();
+        this.namelabel.x = -30;
+        this.namelabel.y = 70;
         this.namelabel.$setTextColor(0X00000);
-        this.namelabel.size=40;  
+        this.namelabel.size = 40;
         this.NPCField.addChild(this.namelabel);
         this.addChild(this.NPCField);
     }
-
-    public call(){
-        this.namelabel.text=this._name;     
+    //调用函数
+    public call() {
+        this.namelabel.text = this._name;
         this.getTask();
         this.responseTask();
         this.onNPCclick();
     }
-
-    public onNPCclick(){
-        this._role.touchEnabled=true;
-        this._role.addEventListener(egret.TouchEvent.TOUCH_TAP,()=>{
+    //鼠标点击
+    private dialogue = new DialoguePanel();
+    private IsDialogueOpen = false;
+    public onNPCclick() {
+        this._role.touchEnabled = true;
+        this._role.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
             // this.getTask();
             // this.responseTask();
-            var task=this.getOptimalTask();
-            var fromself:boolean=false;
-            var toself:boolean=false;
-            if(task.getfromNpcId()==this._id) fromself=true;
-            if(task.gettoNpcId()==this._id) toself=true;
-            var  dialogue=new DialoguePanel();
-            dialogue.anchorOffsetX=dialogue.width/2;
-            dialogue.anchorOffsetY=dialogue.height/2;
-            dialogue.x=this.parent.stage.width/2-this.x;
-            dialogue.y=this.parent.stage.height/2-this.y;
-            dialogue.call(task,fromself,toself);
-            this.addChild(dialogue);
+            var task = this.getOptimalTask();
+            var fromself: boolean = false;
+            var toself: boolean = false;
+            if (task.getfromNpcId() == this._id) fromself = true;
+            if (task.gettoNpcId() == this._id) toself = true;
+
+            this.dialogue.anchorOffsetX = this.dialogue.width / 2;
+            this.dialogue.anchorOffsetY = this.dialogue.height / 2;
+            this.dialogue.x = this.parent.stage.width / 2 - this.x;
+            this.dialogue.y = this.parent.stage.height / 2 - this.y;
+            this.dialogue.call(task, fromself, toself);
+            this.addChild(this.dialogue);
+            this.IsDialogueOpen = true;
             this.getTask();
             this.responseTask();
-        },this);
+        }, this);
     }
-    private getOptimalTask():Task{
-        var task:Task;
-        for(var s=0;s<this._tasklist.length;s++){
-        //优先查找自己能结算的任务
-            if(this._tasklist[s].gettoNpcId()==this._id){
-                switch(this._tasklist[s].getstatus()){
+    public closeDialogue() {
+        if (this.IsDialogueOpen = true)
+            this.removeChild(this.dialogue);
+        else
+            console.error("对话框并没有打开，无法关闭");
+    }
+    private getOptimalTask(): Task {
+        var task: Task;
+        for (var s = 0; s < this._tasklist.length; s++) {
+            //优先查找自己能结算的任务
+            if (this._tasklist[s].gettoNpcId() == this._id) {
+                switch (this._tasklist[s].getstatus()) {
                     case statusType.Unacceptable:
                         break;
                     case statusType.Acceptable:
                         break;
                     case statusType.Cancomplete:
-                        task=this._tasklist[s];
+                        task = this._tasklist[s];
                         //console.log("结算");
                         break;
                     case statusType.Complete:
                         //task=this._tasklist[s];
                         break;
-                     case statusType.Working:
+                    case statusType.Working:
                         //task=this._tasklist[s];
                         break;
                 }
-                
+
             }
         }
-        if(task==null){
-            for(var s=0;s<this._tasklist.length;s++){
-            //次选查找自己能发送的任务
-                if(this._tasklist[s].getfromNpcId()==this._id){
-                    switch(this._tasklist[s].getstatus()){
+        if (task == null) {
+            for (var s = 0; s < this._tasklist.length; s++) {
+                //次选查找自己能发送的任务
+                if (this._tasklist[s].getfromNpcId() == this._id) {
+                    switch (this._tasklist[s].getstatus()) {
                         case statusType.Unacceptable:
                             break;
                         case statusType.Acceptable:
-                            task=this._tasklist[s];
-                             console.log("提交");
+                            task = this._tasklist[s];
+                            console.log("提交");
                             break;
                         case statusType.Cancomplete:
                             break;
@@ -122,40 +131,40 @@ class NPC extends egret.DisplayObjectContainer  implements Observer{
             }
         }
         //身上既没有能发出的任务也没有能结算的任务，随意一个任务
-        if(task==null){
-            task=this._tasklist[0];
+        if (task == null) {
+            task = this._tasklist[0];
         }
         return task;
     }
 
-    private CreatNPC(id:string):string[]{
-           var Animationlist:string[]=[];
-           for(var s=0;s<NPC.NPC_LIST[id].Flashlist;s++){
-                if(s<10) Animationlist.push( "NPC"+id+"_0"+s+""+"_png");
-                if(s>10) Animationlist.push( "NPC"+id+"_"+s+""+"_png");
-           }
-           return Animationlist;
+    private CreatNPC(id: string): string[] {
+        var Animationlist: string[] = [];
+        for (var s = 0; s < NPC.NPC_LIST[id].Flashlist; s++) {
+            if (s < 10) Animationlist.push("NPC" + id + "_0" + s + "" + "_png");
+            if (s > 10) Animationlist.push("NPC" + id + "_" + s + "" + "_png");
+        }
+        return Animationlist;
     }
 
-    private getTask(){
+    private getTask() {
 
-        var NPCRule:Function=   (tasklist):Task[]=>{
-            var temptasklist:Task[]=[];
-            for (var id in tasklist){
-               var task:Task=tasklist[id];
-               if(task.gettoNpcId()==this._id){
-                   temptasklist.push(task);
-               }
-               if(task.getfromNpcId()==this._id){
+        var NPCRule: Function = (tasklist): Task[] => {
+            var temptasklist: Task[] = [];
+            for (var id in tasklist) {
+                var task: Task = tasklist[id];
+                if (task.gettoNpcId() == this._id) {
                     temptasklist.push(task);
-               }
+                }
+                if (task.getfromNpcId() == this._id) {
+                    temptasklist.push(task);
+                }
             }
             return temptasklist;
         }
-        this._tasklist=TaskService.getIntance().getTaskByCustomRule(NPCRule);
+        this._tasklist = TaskService.getIntance().getTaskByCustomRule(NPCRule);
     }
 
-    public onchange(task:Task){
+    public onchange(task: Task) {
         // for(var s of this._tasklist){
         //     if(s.getid()==task.getid()){
         //         if(s.getfromNpcId() == this._id)
@@ -171,57 +180,57 @@ class NPC extends egret.DisplayObjectContainer  implements Observer{
     // public addTask(task:Task){
     //     this._tasklist.push(task);
     // }
-//是否身上有未发出的任务
-    private hasSendTask():boolean{
-        for(var s of this._tasklist){
-            if(s.getfromNpcId()==this._id && s.getstatus()==statusType.Acceptable){
-               return true;
+    //是否身上有未发出的任务
+    private hasSendTask(): boolean {
+        for (var s of this._tasklist) {
+            if (s.getfromNpcId() == this._id && s.getstatus() == statusType.Acceptable) {
+                return true;
             }
         }
         return false;
     }
-//是否身上有未提交的任务
-    private hasReceiveTask():boolean{
-        for(var s of this._tasklist){
+    //是否身上有未提交的任务
+    private hasReceiveTask(): boolean {
+        for (var s of this._tasklist) {
             // if(s.gettoNpcId()==this._id && s.getstatus()==statusType.Working){
             //    return true;
             // }
-            if(s.gettoNpcId()==this._id && s.getstatus()==statusType.Cancomplete){
-               return true;
+            if (s.gettoNpcId() == this._id && s.getstatus() == statusType.Cancomplete) {
+                return true;
             }
         }
         return false;
     }
 
-    public responseTask(){
+    public responseTask() {
         /**缺最优算法 */
-        var s=this.getOptimalTask();
-            //任务发出不可接受，没有表情
-            if(s.getstatus()==statusType.Unacceptable){
-                this.taskresponse.texture=RES.getRes("0_png");
-                //console.log("0.png");
-            }
-            //任务发出可接受，蓝色问号
-            if(s.getfromNpcId()==this._id && s.getstatus()==statusType.Acceptable){
-                this.taskresponse.texture=RES.getRes("1_png");
-                //console.log("1.png");
-            }
-            //任务进行中，灰色问号
-            if(s.gettoNpcId()==this._id && s.getstatus()==statusType.Working){
-                this.taskresponse.texture=RES.getRes("2_png");
-                //console.log("2.png");
-            }
-            //任务可完成但没提交，金色问号
-            if(s.gettoNpcId()==this._id && s.getstatus()==statusType.Cancomplete){
-                this.taskresponse.texture=RES.getRes("3_png");
-                //console.log("3.png");
-            }
-            //任务提交完成，没有表情
-            if(s.gettoNpcId()==this._id && s.getstatus()==statusType.Complete){
-                this.taskresponse.texture=RES.getRes("0_png");
-                //console.log("0.png");
-            }
-        if(!this.hasSendTask()&&!this.hasReceiveTask())
-            this.taskresponse.texture=RES.getRes("0_png");
+        var s = this.getOptimalTask();
+        //任务发出不可接受，没有表情
+        if (s.getstatus() == statusType.Unacceptable) {
+            this.taskresponse.texture = RES.getRes("0_png");
+            //console.log("0.png");
+        }
+        //任务发出可接受，蓝色问号
+        if (s.getfromNpcId() == this._id && s.getstatus() == statusType.Acceptable) {
+            this.taskresponse.texture = RES.getRes("1_png");
+            //console.log("1.png");
+        }
+        //任务进行中，灰色问号
+        if (s.gettoNpcId() == this._id && s.getstatus() == statusType.Working) {
+            this.taskresponse.texture = RES.getRes("2_png");
+            //console.log("2.png");
+        }
+        //任务可完成但没提交，金色问号
+        if (s.gettoNpcId() == this._id && s.getstatus() == statusType.Cancomplete) {
+            this.taskresponse.texture = RES.getRes("3_png");
+            //console.log("3.png");
+        }
+        //任务提交完成，没有表情
+        if (s.gettoNpcId() == this._id && s.getstatus() == statusType.Complete) {
+            this.taskresponse.texture = RES.getRes("0_png");
+            //console.log("0.png");
+        }
+        if (!this.hasSendTask() && !this.hasReceiveTask())
+            this.taskresponse.texture = RES.getRes("0_png");
     }
 }

@@ -23,9 +23,16 @@ class User {
     static heroesInTeamLimit = 5;
     role: Role;
     container: egret.DisplayObjectContainer;
+    static idlelist = ["Idle0_png", "Idle1_png", "Idle2_png", "Idle3_png"];
+    static walklist = ["10000_png", "10001_png", "10002_png", "10003_png", "10004_png", "10005_png", "10006_png", "10007_png"];
+    static instance: User;
+    static count = 0;
     constructor() {
+        User.count++;
+        if (User.count > 1)
+            throw 'singleton!!';
         this.container = new egret.DisplayObjectContainer();
-        
+
         this.role = new Role();
         this.id = "";
         this.exp = new Bignumber();
@@ -33,6 +40,11 @@ class User {
         this.heros = [];
         this.container.addChild(this.role);
 
+    }
+    static getInstance() {
+        if (this.instance == null)
+            this.instance = new User();
+        return this.instance;
     }
     get heroesInTeam() {
         return this.heros.filter(hero => hero.isInTeam)
@@ -48,25 +60,25 @@ class User {
         return this._cacheFightPower;
     }
 
-    setinformation(id: string,idlelist:string[],walklist:string[]) {
+    setinformation(id: string, idlelist: string[], walklist: string[]) {
         this.id = id;
         this.role.x = 0;
         this.role.y = 200;
         this.role.scaleX = 0.8;
         this.role.scaleY = 0.8;
         //this.addChild(this.role);
-        this.role.call(idlelist,walklist);
+        this.role.call(idlelist, walklist);
         //console.log(this.role._role.texture);
         this.tapRole();
     }
 
-    private tapRole(){
-        var heroBar=new HeroBar();
-        this.role._role.touchEnabled=true;
-        this.role._role.addEventListener(egret.TouchEvent.TOUCH_TAP,()=>{
+    private tapRole() {
+        var heroBar = new HeroBar();
+        this.role._role.touchEnabled = true;
+        this.role._role.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
             heroBar.setInformation(this);
             this.container.addChild(heroBar);
-        },this)
+        }, this)
     }
 
     addHero(hero: Hero) {

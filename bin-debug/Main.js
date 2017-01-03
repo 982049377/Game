@@ -31,18 +31,8 @@ var Main = (function (_super) {
     //public sssssss;
     function Main() {
         _super.call(this);
-        /**
-         * 创建游戏场景
-         * Create a game scene
-         */
-        // private _player: Role;
-        this.idlelist = ["Idle0_png", "Idle1_png", "Idle2_png", "Idle3_png"];
-        this.walklist = ["10000_png", "10001_png", "10002_png", "10003_png", "10004_png", "10005_png", "10006_png", "10007_png"];
         this.prevX = 0;
         this.map_Grid = 0;
-        /**帧事件' */
-        this.step = 10;
-        this.i = 2;
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }
     var d = __define,c=Main,p=c.prototype;
@@ -136,20 +126,20 @@ var Main = (function (_super) {
         this.map.Create();
         var gameScene = new GameScene(this.map);
         GameManager.getInstance().secneManager.addScene(gameScene);
-        this.user = new User();
+        this.user = User.getInstance();
         //this._container.addChild(this.user.container)
         GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, this.user.container);
-        this.user.setinformation("982049377", this.idlelist, this.walklist);
+        this.user.setinformation("982049377", User.idlelist, User.walklist);
         //this.addChild(this._container);
         this.walkByTap();
         this.mapMove();
         var guanyu = new Hero();
-        var bitmap = this.createBitmapByName("001_png");
+        var bitmap = tool.createBitmapByName("001_png");
         guanyu.setinformation("001", "关羽", 95, 85, heroQualitySort.S, bitmap);
         this.user.addHero(guanyu);
         this.user.inToTeam(guanyu);
         var qinglongyanyuedao = new Equipment();
-        bitmap = this.createBitmapByName("weapan001_png");
+        bitmap = tool.createBitmapByName("weapan001_png");
         qinglongyanyuedao.setinformation("we001", 10, 0, "青龙偃月刀", equipmentQualitySort.Story, bitmap);
         // var atkCrystal = new Crystal();
         // bitmap = this.createBitmapByName("atk001_png");
@@ -220,8 +210,8 @@ var Main = (function (_super) {
      * 虽然用了UI层级管理器但监听还是很恶心
      * hero打开hero状态面板和后面的装备打开装备面板相同，就没做了
      */
+    /***地图 */
     p.mapMove = function () {
-        /***地图 */
         var _this = this;
         this._container.touchEnabled = true;
         this._container.addEventListener(egret.TouchEvent.TOUCH_BEGIN, function (e) {
@@ -234,44 +224,12 @@ var Main = (function (_super) {
         }, this);
     };
     p.walkByTap = function () {
-        var _this = this;
-        var idle = new Idle(this.user.role, this.idlelist);
-        var walk = new Walk(this.user.role, this.walklist);
+        function ss() { }
         this.map.touchEnabled = true;
         this.map.addEventListener(egret.TouchEvent.TOUCH_TAP, function (evt) {
-            _this.setAstar();
-            console.log("map tap");
-            _this.map._astar.setStartNode(Math.floor((_this.user.role.x) / 100), Math.floor(_this.user.role.y / 100));
-            //this._bg._astar.setStartNode(Math.floor(this._player.x/100),Math.floor(this._player.y/100));
-            //this._bg._astar.setEndNode(Math.floor(evt.stageX/100),Math.floor(evt.stageY/100));
-            _this.map._astar.setEndNode(Math.floor((evt.stageX + _this.map_Grid) / 100), Math.floor(evt.stageY / 100));
-            var i = _this.map._astar.findPath();
-            if (i == 1) {
-                _this.user.role.SetState(walk);
-                //egret.Tween.removeTweens(this._player);
-                _this.addEventListener(egret.Event.ENTER_FRAME, _this.onEnterFrame, _this);
-                _this.onEnterFrame;
-                //this.Move();
-                i = 2;
-            }
-            else if (i == 0) {
-                _this.user.role.SetState(idle);
-                _this.setAstar();
-                i = 2;
-            }
-            else if (i == -1) {
-                _this.user.role.SetState(idle);
-                _this.setAstar();
-                i = 2;
-            }
-        }, this);
-        egret.startTick(function () {
-            if (_this.map._astar._path[0] != null) {
-                if (_this.user.role.x == (_this.map._astar._path[0].x) * _this.map.MapSize + 50 && _this.user.role.y == _this.map._astar._path[0].y * _this.map.MapSize + 50) {
-                    _this.user.role.SetState(idle);
-                }
-            }
-            return false;
+            var walkCommand = new WalkCommand(evt.stageX, evt.stageY);
+            walkCommand.execute(ss);
+            console.log("1111111111111111111111111111111");
         }, this);
     };
     p.onMove = function (e) {
@@ -288,59 +246,10 @@ var Main = (function (_super) {
             this.map_Grid = 0;
         }
     };
-    p.onEnterFrame = function (event) {
-        //console.log('hi');
-        var n = this.map._astar._path.length;
-        //console.log(n - this.i);
-        if (n - this.i < 0)
-            return;
-        var targetX = this.map._astar._path[n - this.i].x * this.map.MapSize + this.map.MapSize / 2;
-        var targetY = this.map._astar._path[n - this.i].y * this.map.MapSize + this.map.MapSize / 2;
-        var dx = targetX - this.user.role.x;
-        var dy = targetY - this.user.role.y;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < this.step * 2) {
-            this.i++;
-            if (this.i > this.map._astar._path.length) {
-                this.removeEventListener(egret.Event.ENTER_FRAME, this.onEnterFrame, this);
-            }
-        }
-        else {
-            if (targetX - this.user.role.x > this.step)
-                this.user.role.x += this.step;
-            if (targetY - this.user.role.y > this.step)
-                this.user.role.y += this.step;
-            if (this.user.role.x - targetX > this.step)
-                this.user.role.x -= this.step;
-            if (this.user.role.y - targetY > this.step)
-                this.user.role.y -= this.step;
-            if (Math.abs(this.user.role.x - targetX) <= this.step) {
-                this.user.role.x = targetX;
-            }
-            if (Math.abs(this.user.role.y - targetY) <= this.step) {
-                this.user.role.y = targetY;
-            }
-        }
-        // console.log("targetX:"+targetX+"targetY:"+targetY);
-        // console.log("person.x:"+this._player.x+"person.y:"+this._player.y); 
-        // console.log("dx:"+dx+"dy:"+dy); 
-    };
-    p.setAstar = function () {
-        egret.Tween.removeTweens(this.user.role);
-        this.map._astar.setStartNode(Math.floor(this.user.role.x / 100), Math.floor(this.user.role.y / 100));
-        this.map._astar.empty();
-        this.i = 1;
-    };
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
      * Create a Bitmap object according to name keyword.As for the property of name please refer to the configuration file of resources/resource.json.
      */
-    p.createBitmapByName = function (name) {
-        var result = new egret.Bitmap();
-        var texture = RES.getRes(name);
-        result.texture = texture;
-        return result;
-    };
     /**
      * 描述文件加载成功，开始播放动画
      * Description file loading is successful, start to play the animation
@@ -379,10 +288,4 @@ var Main = (function (_super) {
     return Main;
 }(egret.DisplayObjectContainer));
 egret.registerClass(Main,'Main');
-/*
-class ss{
-   public ssss(e:Main){
-       e.sssssss;
-   }
-}*/ 
 //# sourceMappingURL=Main.js.map
