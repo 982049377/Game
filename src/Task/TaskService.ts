@@ -1,4 +1,4 @@
-class TaskService implements EventEmitter {
+class TaskService {
     //private _tasklist:Task[]=[];
     private _observerlist: Observer[] = [];
     public static instance: TaskService;// = new TaskService;
@@ -70,18 +70,18 @@ class TaskService implements EventEmitter {
             s.onchange(this._tasklist[id]);
     }
 
-    public KillMonster(id: string) {
-        if (this._tasklist[id] == null) {
-            throw '没有这个任务';
-        }
-        this._tasklist[id].setcurrent();
-        this.notify(id);
-    }
+
+    // public notifyKillMonster(monsterId:string){
+    //     this._tasklist[]._condition.onAccept
+    // }
+
+    // public KillMonster(id: string) {
+    //     if (this._tasklist[id] == null) {
+    //         throw '没有这个任务';
+    //     }
+    //     this._tasklist[id].setcurrent();
+    //     this.notify(id);
+    // }
 
 }
 
-interface EventEmitter {
-    addObserver(observer: Observer);
-
-    notify(id: string);
-}

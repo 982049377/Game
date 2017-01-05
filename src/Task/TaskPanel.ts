@@ -55,12 +55,12 @@ class TaskPanel extends egret.DisplayObjectContainer implements Observer {
 
     private getText():string{
         var str:string="";
-        for(var i=0;i<this._tasklist.length;i++)
+        for(let task of this._tasklist)
         {
-            str+=this._tasklist[i].getname()+"      ";
-            if(this._tasklist[i].getstatus()==statusType.Working)
+            str+=task.getname()+"      ";
+            if(task.getstatus()==statusType.Working)
                 str+="执行中\n";
-            if(this._tasklist[i].getstatus()==statusType.Cancomplete)
+            if(task.getstatus()==statusType.Cancomplete)
                 str+="可完成\n";
         }
         return str;

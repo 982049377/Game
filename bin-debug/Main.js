@@ -98,19 +98,19 @@ var Main = (function (_super) {
         }
     };
     //生成任务条件 
-    p.creatTaskCondition = function (type) {
+    p.creatTaskCondition = function (type, target) {
         var taskCondition = null;
         if (type == "NPCTalkTaskCondition")
             taskCondition = new NPCTalkTaskCondition();
         if (type == "KillMonsterTaskCondition")
-            taskCondition = new KillMonsterTaskCondition();
+            taskCondition = new KillMonsterTaskCondition(target);
         return taskCondition;
     };
     //生成任务
     p.creatTask = function (id) {
         var taskCondition = null;
-        taskCondition = this.creatTaskCondition(Task.Task_LIST[id].TaskCondition);
-        var task = new Task(id, Task.Task_LIST[id].name, Task.Task_LIST[id].dris, Task.Task_LIST[id].fromNPCid, Task.Task_LIST[id].toNPCid, Task.Task_LIST[id].total, taskCondition, Task.Task_LIST[id].toid);
+        taskCondition = this.creatTaskCondition(Task.Task_LIST[id].TaskCondition.type, Task.Task_LIST[id].TaskCondition.target);
+        var task = new Task(id, Task.Task_LIST[id].name, Task.Task_LIST[id].dris, Task.Task_LIST[id].fromNPCid, Task.Task_LIST[id].toNPCid, Task.Task_LIST[id].TaskCondition.total, taskCondition, Task.Task_LIST[id].toid);
         return task;
     };
     //private gameManager:GameManager;
@@ -188,23 +188,16 @@ var Main = (function (_super) {
             // taskPanel.x = 100;
             // taskPanel.y = 600;
         }, this);
-        var Monster = new egret.Bitmap();
-        Monster.texture = RES.getRes("Monster_png");
-        Monster.x = 400;
-        Monster.y = 900;
-        Monster.scaleX = 0.5;
-        Monster.scaleY = 0.5;
-        this._container.addChild(Monster);
-        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, Monster);
-        Monster.touchEnabled = true;
-        Monster.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
-            var list = new CommandList();
-            var walk = new WalkCommand(Monster.x - GameScene.mapOffsetX, Monster.y);
-            var fight = new FightCommand();
-            list.addCommand(walk);
-            list.addCommand(fight);
-            list.execute();
-        }, this);
+        var monster = new Monster();
+        var bit = new egret.Bitmap();
+        bit.texture = RES.getRes("Monster_png");
+        monster.call("monster001", "黄巾贼", 60, 50, bit, 50);
+        monster.x = 400;
+        monster.y = 900;
+        monster.scaleX = 0.5;
+        monster.scaleY = 0.5;
+        //this._container.addChild(monster);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, monster);
         this._container.addChild(GameManager.getInstance().UIManager);
         this.addChild(this._container);
         this.addChild(TaskPanelLogo); //为了能移动

@@ -30,7 +30,7 @@ var FightCommand = (function () {
     p.execute = function (callback) {
         var _this = this;
         //this.i++;
-        this.sceneService.notify("002");
+        //this.sceneService.notify("002");
         //console.log(this.i);
         // console.log("开始战斗")
         egret.setTimeout(function () {

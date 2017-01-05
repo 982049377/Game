@@ -1,7 +1,9 @@
 class GameScene extends egret.DisplayObjectContainer implements EventEmitter {
     public map: TileMap;
+    public taskCondition: conditionObserver[];
     constructor(map: TileMap) {
         super();
+        this.taskCondition = [];
         this.map = map;
         this.user = User.getInstance();
         this.idle = new Idle(this.user.role, User.idlelist);
@@ -153,12 +155,18 @@ class GameScene extends egret.DisplayObjectContainer implements EventEmitter {
         }
     }
 
-    public addObserver(observer: Observer) {
+    public addconditionObserver(tempTaskCondition: conditionObserver) {
+        this.taskCondition.push(tempTaskCondition);
     }
 
+
     public notify(id: string) {
+        for (var i of this.taskCondition) {
+            i.onchange(id);
+            console.log("杀怪了");
+        }
         //var task=TaskService.getIntance()._tasklist[id];
-        TaskService.getIntance().KillMonster(id)
+        //TaskService.getIntance().notify().
     }
 }
 

@@ -50,11 +50,12 @@ var TaskPanel = (function (_super) {
     };
     p.getText = function () {
         var str = "";
-        for (var i = 0; i < this._tasklist.length; i++) {
-            str += this._tasklist[i].getname() + "      ";
-            if (this._tasklist[i].getstatus() == statusType.Working)
+        for (var _i = 0, _a = this._tasklist; _i < _a.length; _i++) {
+            var task = _a[_i];
+            str += task.getname() + "      ";
+            if (task.getstatus() == statusType.Working)
                 str += "执行中\n";
-            if (this._tasklist[i].getstatus() == statusType.Cancomplete)
+            if (task.getstatus() == statusType.Cancomplete)
                 str += "可完成\n";
         }
         return str;

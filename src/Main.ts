@@ -111,25 +111,25 @@ class Main extends egret.DisplayObjectContainer {
     }
 
     //生成任务条件 
-    private creatTaskCondition(type: string) {
+    private creatTaskCondition(type: string,target:string) {
         var taskCondition = null;
         if (type == "NPCTalkTaskCondition")
             taskCondition = new NPCTalkTaskCondition();
         if (type == "KillMonsterTaskCondition")
-            taskCondition = new KillMonsterTaskCondition();
+            taskCondition = new KillMonsterTaskCondition(target);
         return taskCondition;
     }
 
     //生成任务
     private creatTask(id: string): Task {
         var taskCondition = null;
-        taskCondition = this.creatTaskCondition(Task.Task_LIST[id].TaskCondition);
+        taskCondition = this.creatTaskCondition(Task.Task_LIST[id].TaskCondition.type,Task.Task_LIST[id].TaskCondition.target);
         var task = new Task(id,
             Task.Task_LIST[id].name,
             Task.Task_LIST[id].dris,
             Task.Task_LIST[id].fromNPCid,
             Task.Task_LIST[id].toNPCid,
-            Task.Task_LIST[id].total,
+            Task.Task_LIST[id].TaskCondition.total,
             taskCondition,
             Task.Task_LIST[id].toid);
         return task;
@@ -201,6 +201,7 @@ class Main extends egret.DisplayObjectContainer {
         var taskService: TaskService = TaskService.getIntance();
         var task: Task = this.creatTask("001");
         var task2: Task = this.creatTask("002");
+        
         taskService.addTask(task);
         taskService.addTask(task2);
 
@@ -242,24 +243,19 @@ class Main extends egret.DisplayObjectContainer {
         }, this);
 
 
-        var Monster: egret.Bitmap = new egret.Bitmap();
-        Monster.texture = RES.getRes("Monster_png");
-        Monster.x = 400;
-        Monster.y = 900;
-        Monster.scaleX = 0.5;
-        Monster.scaleY = 0.5;
-        this._container.addChild(Monster);
-        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, Monster);
+        var monster=new Monster();
+        var bit = new egret.Bitmap();
+        bit.texture = RES.getRes("Monster_png");
+        monster.call("monster001","黄巾贼",60,50,bit,50);
+        
+        monster.x = 400;
+        monster.y = 900;
+        monster.scaleX = 0.5;
+        monster.scaleY = 0.5;
+        //this._container.addChild(monster);
+        GameManager.getInstance().UIManager.addLayer(LayerType.UILayer, monster);
 
-        Monster.touchEnabled = true;
-        Monster.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-            var list = new CommandList();
-            var walk = new WalkCommand(Monster.x - GameScene.mapOffsetX, Monster.y);
-            var fight = new FightCommand();
-            list.addCommand(walk);
-            list.addCommand(fight);
-            list.execute();
-        }, this);
+     
         this._container.addChild(GameManager.getInstance().UIManager);
         this.addChild(this._container);
         this.addChild(TaskPanelLogo);//为了能移动

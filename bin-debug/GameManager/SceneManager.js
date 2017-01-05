@@ -6,6 +6,7 @@ var GameScene = (function (_super) {
         this.step = 10;
         this.i = 2;
         this.prevX = 0;
+        this.taskCondition = [];
         this.map = map;
         this.user = User.getInstance();
         this.idle = new Idle(this.user.role, User.idlelist);
@@ -135,11 +136,17 @@ var GameScene = (function (_super) {
             GameScene.mapOffsetX = 0;
         }
     };
-    p.addObserver = function (observer) {
+    p.addconditionObserver = function (tempTaskCondition) {
+        this.taskCondition.push(tempTaskCondition);
     };
     p.notify = function (id) {
+        for (var _i = 0, _a = this.taskCondition; _i < _a.length; _i++) {
+            var i = _a[_i];
+            i.onchange(id);
+            console.log("杀怪了");
+        }
         //var task=TaskService.getIntance()._tasklist[id];
-        TaskService.getIntance().KillMonster(id);
+        //TaskService.getIntance().notify().
     };
     GameScene.mapOffsetX = 0;
     return GameScene;

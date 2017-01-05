@@ -1,8 +1,8 @@
 var Task = (function () {
-    function Task(id, name, dris, fromNpcId, toNpcId, total, condition, toid) {
+    function Task(id, name, dris, fromNpcId, toNpcId, total, condition, toTaskid) {
         this._current = 0;
         this._total = -1;
-        this._toid = toid;
+        this._toTaskid = toTaskid;
         this._id = id;
         this._name = name;
         this._dris = dris;
@@ -46,8 +46,8 @@ var Task = (function () {
         this._status = statusType.Complete;
         // console.log(this._status);
         //   this._condition.onsubmit(this);
-        if (this._toid != null) {
-            TaskService.getIntance().Canaccept(this._toid);
+        if (this._toTaskid != null) {
+            TaskService.getIntance().Canaccept(this._toTaskid);
         }
     };
     p.accept = function () {
@@ -81,8 +81,7 @@ var Task = (function () {
                 console.error(this._name + "的this._current>this._total");
                 this._status = statusType.Cancomplete;
             }
-            this.em = TaskService.getIntance();
-            this.em.notify(this._id);
+            TaskService.getIntance().notify(this._id);
         }
     };
     // preid:string,
@@ -91,15 +90,14 @@ var Task = (function () {
             dris: "和陆逊对话",
             fromNPCid: "01",
             toNPCid: "02",
-            total: 1,
-            TaskCondition: "NPCTalkTaskCondition",
+            TaskCondition: { type: "NPCTalkTaskCondition", target: null, total: 1 },
             toid: "002" },
         "002": { name: "战斗",
-            dris: "攻打强敌10次",
+            dris: "攻打强敌1次",
             fromNPCid: "02",
             toNPCid: "01",
-            total: 10,
-            TaskCondition: "KillMonsterTaskCondition",
+            //total:10,
+            TaskCondition: { type: "KillMonsterTaskCondition", target: "monster001", total: 1 },
             toid: null } //陆逊
     };
     return Task;
@@ -117,19 +115,23 @@ var NPCTalkTaskCondition = (function () {
 }());
 egret.registerClass(NPCTalkTaskCondition,'NPCTalkTaskCondition',["TaskCondition"]);
 var KillMonsterTaskCondition = (function () {
-    function KillMonsterTaskCondition() {
+    function KillMonsterTaskCondition(monsterID) {
+        this.monsterID = monsterID;
     }
     var d = __define,c=KillMonsterTaskCondition,p=c.prototype;
     p.onAccept = function (task) {
+        this.task = task;
+        GameManager.getInstance().secneManager.currentScene.addconditionObserver(this);
     };
     // onsubmit(task: TaskConditionContext) {
     // }
-    p.onchange = function (task) {
-        task.setcurrent();
+    p.onchange = function (monsterID) {
+        if (this.monsterID == monsterID)
+            this.task.setcurrent();
     };
     return KillMonsterTaskCondition;
 }());
-egret.registerClass(KillMonsterTaskCondition,'KillMonsterTaskCondition',["TaskCondition","Observer"]);
+egret.registerClass(KillMonsterTaskCondition,'KillMonsterTaskCondition',["TaskCondition","conditionObserver"]);
 var statusType;
 (function (statusType) {
     statusType[statusType["Unacceptable"] = 0] = "Unacceptable";
