@@ -121,7 +121,6 @@ var Hero = (function (_super) {
     p.setinformation = function (id, name, atk, def, quality, bitmap) {
         var _this = this;
         this.properties.setInformation(id, this.tempid, name, atk, def, bitmap);
-        this.name = name;
         this.quality = quality;
         this.properties._bitmap.touchEnabled = true;
         var heroStatusBar = new HeroStatusBar();

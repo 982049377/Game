@@ -52,7 +52,7 @@ var GameScene = (function (_super) {
             this.user.role.SetState(this.walk);
             //egret.Tween.removeTweens(this._player);
             this.addEventListener(egret.Event.ENTER_FRAME, this.onEnterFrame, this);
-            this.onEnterFrame;
+            // this.onEnterFrame;
             //this.Move();
             i = 2;
         }

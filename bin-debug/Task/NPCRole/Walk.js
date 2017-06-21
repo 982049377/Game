@@ -2,6 +2,7 @@ var Walk = (function () {
     function Walk(pperson, walk) {
         this.Walkcount = -1;
         this.i = 0;
+        this.offset = 0;
         this.person = pperson;
         this.Walklist = walk;
     }
@@ -14,17 +15,26 @@ var Walk = (function () {
         egret.stopTick(this.PlayWalk, this);
     };
     p.PlayWalk = function () {
-        this.Walkcount++;
-        this.i++;
-        if (this.Walkcount >= this.Walklist.length)
-            this.Walkcount = 0;
-        if (this.i == 10) {
+        this.offset++;
+        if (this.offset > 4) {
+            if (this.Walkcount >= this.Walklist.length - 1)
+                this.Walkcount = -1;
+            this.Walkcount++;
             this.person._role.texture = RES.getRes(this.Walklist[this.Walkcount]);
-            this.i = 0;
+            this.offset = 0;
         }
-        //  console.log("Walk");
-        //  console.log(this.Walklist[this.Walkcount]);
         return true;
+        //     this.Walkcount++;
+        //     this.i++;
+        //     if(this.Walkcount>=this.Walklist.length)
+        //         this.Walkcount=0;
+        //     if(this.i==10){
+        //         this.person._role.texture=RES.getRes(this.Walklist[this.Walkcount]);
+        //         this.i=0;
+        //     }
+        //     //  console.log("Walk");
+        //     //  console.log(this.Walklist[this.Walkcount]);
+        //       return true;
     };
     return Walk;
 }());

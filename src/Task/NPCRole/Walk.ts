@@ -1,22 +1,24 @@
-class Walk implements State{
-          private Walklist:string[];
-          private Walkcount=-1;
-          private person:Role;
-          private i:number=0;
-          public constructor(pperson:Role,walk:string[]) {
-             this.person=pperson;
-             this.Walklist=walk;
-          }
-          onEnter(){
-                egret.startTick(this.PlayWalk,this);
-          //           console.log("EnterWalk");
-          }
+class Walk implements State {
+      private Walklist: string[];
+      private Walkcount = -1;
+      private person: Role;
+      private i: number = 0;
+      public constructor(pperson: Role, walk: string[]) {
+            this.person = pperson;
+            this.Walklist = walk;
+      }
+      onEnter() {
+            egret.startTick(this.PlayWalk, this);
+            //           console.log("EnterWalk");
+      }
 
-          onExit(){
-      
-                egret.stopTick(this.PlayWalk,this);
-          }
-          private PlayWalk():boolean{
+      onExit() {
+
+            egret.stopTick(this.PlayWalk, this);
+      }
+      offset = 0;
+      private PlayWalk(): boolean {
+
                 this.Walkcount++;
                 this.i++;
                 if(this.Walkcount>=this.Walklist.length)
@@ -28,5 +30,5 @@ class Walk implements State{
                 //  console.log("Walk");
                 //  console.log(this.Walklist[this.Walkcount]);
                   return true;
-          }
+      }
 }

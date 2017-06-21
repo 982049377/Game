@@ -121,7 +121,6 @@ class Hero extends egret.DisplayObjectContainer implements Objectdetail {
     tempid = 0;
     setinformation(id: string, name: string, atk: number, def: number, quality: heroQualitySort, bitmap: egret.Bitmap) {
         this.properties.setInformation(id, this.tempid, name, atk, def, bitmap);
-        this.name = name;
         this.quality = quality;
         this.properties._bitmap.touchEnabled = true;
         var heroStatusBar = new HeroStatusBar();
